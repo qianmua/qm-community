@@ -3,24 +3,25 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="icon" th:href="@{/img/logo.png}"/>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
 	<link rel="stylesheet" th:href="@{/css/global.css}" />
-	<title>牛客网-操作结果</title>
+	<title>谦牧社区-操作结果</title>
 </head>
 <body class="bg-white">
 	<div class="nk-container">
 		<!-- 头部 -->
 		<header class="bg-dark sticky-top" th:replace="index::header">
-			<div class="container">
-				<!-- 导航 -->
+			<!--<div class="container">
+				&lt;!&ndash; 导航 &ndash;&gt;
 				<nav class="navbar navbar-expand-lg navbar-dark">
-					<!-- logo -->
+					&lt;!&ndash; logo &ndash;&gt;
 					<a class="navbar-brand" href="#"></a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
-					<!-- 功能 -->
+					&lt;!&ndash; 功能 &ndash;&gt;
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav mr-auto">
 							<li class="nav-item ml-3 btn-group-vertical">
@@ -48,14 +49,14 @@
 								</div>
 							</li>
 						</ul>
-						<!-- 搜索 -->
+						&lt;!&ndash; 搜索 &ndash;&gt;
 						<form class="form-inline my-2 my-lg-0" action="search.html">
 							<input class="form-control mr-sm-2" type="search" aria-label="Search" />
 							<button class="btn btn-outline-light my-2 my-sm-0" type="submit">搜索</button>
 						</form>
 					</div>
 				</nav>
-			</div>
+			</div>-->
 		</header>
 
 		<!-- 内容 -->
@@ -73,14 +74,14 @@
 		</div>
 
 		<!-- 尾部 -->
-		<footer class="bg-dark">
-			<div class="container">
+		<footer class="bg-dark" th:replace="index::footer">
+			<!--<div class="container">
 				<div class="row">
-					<!-- 二维码 -->
+					&lt;!&ndash; 二维码 &ndash;&gt;
 					<div class="col-4 qrcode">
 						<img src="https://uploadfiles.nowcoder.com/app/app_download.png" class="img-thumbnail" style="width:136px;" />
 					</div>
-					<!-- 公司信息 -->
+					&lt;!&ndash; 公司信息 &ndash;&gt;
 					<div class="col-8 detail-info">
 						<div class="row">
 							<div class="col">
@@ -131,7 +132,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div>-->
 		</footer>
 	</div>
 

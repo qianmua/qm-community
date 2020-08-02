@@ -24,7 +24,7 @@ import java.util.Random;
  * @version 1.0
  * 谦谦君子 卑以自牧也
  * @date 2020/8/2  13:10
- * @description :
+ * @description :  UserServiceImpl
  */
 @Service
 @Primary
@@ -40,12 +40,30 @@ public class UserServiceImpl implements UserService {
 
     @Value("${community.path.domain}")
     String domain;
-    @Value("${server.servlet.context-path}")
+    //server.servlet.context-path
+    @Value("/")
     String path;
 
+    /**
+     * by id
+     * @param id
+     * @return
+     */
     @Override
     public UserPO selectById(int id) {
         return userMapper.selectById(id);
+    }
+
+
+    /**
+     * 注册
+     * @param user
+     * @return
+     */
+    @Override
+    public Map<String, Object> insertUser(UserPO user) {
+        val map = register(user);
+        return map;
     }
 
     /**
@@ -54,19 +72,19 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public Map<String , Object> register(UserPO userPO){
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>(2);
 
         if (null == userPO){
             throw new IllegalArgumentException("参数不可空");
         }
         if (StringUtils.isBlank(userPO.getPassword())) {
-            map.put("null" , "空值");
+            map.put("passwordMsg" , "空值");
         }
 
         // 验证 账号
         val po = userMapper.selectByName(userPO.getUsername());
         if (null != po){
-            map.put("null" , "存在");
+            map.put("usernameMsg" , "存在");
         }
         // 注册
         // 盐值

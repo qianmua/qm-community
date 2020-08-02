@@ -2,6 +2,8 @@ package pres.hjc.community.service;
 
 import pres.hjc.community.entity.UserPO;
 
+import java.util.Map;
+
 /**
  * @author HJC
  * @version 1.0
@@ -20,9 +22,10 @@ public interface UserService {
     default UserPO selectByEmail(String email){
         return null;
     }
-    default int insertUser(UserPO user){
-        return -1;
+    default Map<String, Object> insertUser(UserPO user){
+        return null;
     }
+
     default int updateStatus(int id, int status){
         return -1;
     }
