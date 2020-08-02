@@ -1,0 +1,35 @@
+package pres.hjc.community.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
+import pres.hjc.community.dao.DiscussPostMapper;
+import pres.hjc.community.entity.DiscussPostPO;
+import pres.hjc.community.service.DiscussPostService;
+
+import java.util.List;
+
+/**
+ * @author HJC
+ * @version 1.0
+ * 谦谦君子 卑以自牧也
+ * @date 2020/8/2  13:05
+ * @description :
+ */
+@Service
+@Primary
+public class DiscussPostServiceImpl implements DiscussPostService {
+
+    @Autowired
+    private DiscussPostMapper discussPostMapper;
+
+    @Override
+    public List<DiscussPostPO> selectDiscussPosts(int userId, int offset, int limit) {
+        return discussPostMapper.selectDiscussPosts(userId, offset, limit);
+    }
+
+    @Override
+    public int selectDiscussPostRows(int userId) {
+        return discussPostMapper.selectDiscussPostRows(userId);
+    }
+}
