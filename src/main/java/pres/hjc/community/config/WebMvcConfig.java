@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import pres.hjc.community.interceptor.BaseHandlerInterceptor;
+import pres.hjc.community.interceptor.LoginTicketHandlerInterceptor;
 
 /**
  * @author HJC
@@ -15,8 +16,11 @@ import pres.hjc.community.interceptor.BaseHandlerInterceptor;
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+
     @Autowired
     private BaseHandlerInterceptor baseHandlerInterceptor;
+    @Autowired
+    private LoginTicketHandlerInterceptor loginTicketHandlerInterceptor;
 
     /**
      * 注册拦截器
@@ -27,5 +31,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(baseHandlerInterceptor)
                 .excludePathPatterns("/**/*.css" , "/**/*.js" , "/img/**")
                 .addPathPatterns("register" , "/login");
+
+        registry.addInterceptor(loginTicketHandlerInterceptor)
+                .excludePathPatterns("/**/*.css" , "/**/*.js" , "/img/**");
     }
 }

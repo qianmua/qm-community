@@ -113,7 +113,8 @@
 		function refresh_kaptcha() {
 		    /*globals*/
             /* 防止 缓存*/
-			var path = CONTEXT_PATH + "/site/kaptcha?p=" + Math.random();
+            /*CONTEXT_PATH +*/
+			var path =  "/site/kaptcha?p=" + Math.random();
 			$("#kaptcha").attr("src", path);
 		}
 	</script>

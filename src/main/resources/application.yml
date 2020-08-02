@@ -32,6 +32,10 @@ spring:
         smtp:
           ssl:
             enable: true
+  devtools:
+    restart:
+      enabled: true
+
 
 # mybatis config
 mybatis:
