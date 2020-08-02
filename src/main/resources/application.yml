@@ -42,3 +42,8 @@ mybatis:
     map-underscore-to-camel-case: true
 
 
+# domain
+community:
+    path:
+      domain: 1111111
+
