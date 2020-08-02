@@ -1,5 +1,6 @@
 package pres.hjc.community.service;
 
+import pres.hjc.community.entity.LoginTicketPO;
 import pres.hjc.community.entity.UserPO;
 
 import java.util.Map;
@@ -51,8 +52,18 @@ public interface UserService {
 
     /**
      * 登出
-     * @param tacket tacket
+     * @param ticket ticket
      */
-    void logout(String tacket);
+    void logout(String ticket);
+
+    /**
+     * 查找凭证
+     * @param ticket
+     * @return
+     */
+    LoginTicketPO findLoginTicket(String ticket);
+
+
+
 
 }

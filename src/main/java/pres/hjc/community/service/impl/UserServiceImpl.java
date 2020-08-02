@@ -201,4 +201,14 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
         // 清除
         loginTicketMapper.updateStatus(ticket, 1);
     }
+
+    /**
+     *
+     * @param ticket ticket
+     * @return ob
+     */
+    @Override
+    public LoginTicketPO findLoginTicket(String ticket) {
+        return loginTicketMapper.selectByTicket(ticket);
+    }
 }
