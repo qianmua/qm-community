@@ -22,6 +22,7 @@ public interface UserService {
     default UserPO selectByEmail(String email){
         return null;
     }
+
     default Map<String, Object> insertUser(UserPO user){
         return null;
     }
@@ -35,5 +36,7 @@ public interface UserService {
     default int updatePassword(int id, String password){
         return -1;
     }
+
+    int activation(int userId , String code);
 
 }

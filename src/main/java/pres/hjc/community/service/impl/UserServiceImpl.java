@@ -11,6 +11,7 @@ import org.thymeleaf.context.Context;
 import pres.hjc.community.dao.UserMapper;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.UserService;
+import pres.hjc.community.tools.CommunityRegisterStatus;
 import pres.hjc.community.tools.CommunityUnit;
 import pres.hjc.community.tools.MailClientUtil;
 
@@ -28,7 +29,8 @@ import java.util.Random;
  */
 @Service
 @Primary
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, CommunityRegisterStatus {
+
     @Autowired
     UserMapper userMapper;
 
@@ -104,12 +106,28 @@ public class UserServiceImpl implements UserService {
 
         context.setVariable("email" , userPO.getEmail());
         // domain //  双端加密 // 不对称加密 + 信息摘要
-        String url = domain + path + "/activation/"+ userPO.getId() + "/"+ userPO.getActivationCode();
+        String url = domain + path + "/site/activation/"+ userPO.getId() + "/"+ userPO.getActivationCode();
 
         context.setVariable("url" , url);
         val process = templateEngine.process("/mail/activation", context);
         mailClientUtil.sendMail(userPO.getEmail(), "账号激活" , process);
 
         return map;
+    }
+
+    @Override
+    public int activation(int userId , String code){
+        val userPO = userMapper.selectById(userId);
+        // 重复操作
+        if (userPO.getStatus() == 1){
+            return ACTIVACTION_ERPEAT;
+        }
+        // 成功
+        if (userPO.getActivationCode().equals(code)){
+            userMapper.updateStatus(userId , 1);
+            return ACTIVACTION_SUCCESS;
+        }
+        // 激活失败
+        return ACTIVACTION_FAILUER;
     }
 }
