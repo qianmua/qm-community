@@ -40,6 +40,19 @@ public interface UserService {
     int activation(int userId , String code);
 
 
+    /**
+     * 登录
+     * @param username
+     * @param password
+     * @param exSeconds
+     * @return
+     */
     Map<String, Object> login(String username , String password , int exSeconds);
+
+    /**
+     * 登出
+     * @param tacket tacket
+     */
+    void logout(String tacket);
 
 }

@@ -10,6 +10,8 @@
 	<title>牛客网-登录</title>
 </head>
 <body>
+<!--给我打钱-->
+<!--伸手 - -！ -->
 	<div class="nk-container">
 		<!-- 头部 -->
 		<header class="bg-dark sticky-top" th:replace="index::header">
@@ -28,6 +30,8 @@
                         <!--个性化体验-->
 						<label for="username" class="col-sm-2 col-form-label text-right">账号:</label>
 						<div class="col-sm-10">
+                            <!--从参数中 取得value-->
+                            <!--回显数据 不重置1-->
 							<input type="text" th:class="|form-control ${usernameMsg!=null?'is-invalid':''}|"
 								   th:value="${param.username}"
 								   id="username" name="username" placeholder="请输入您的账号!" required>
@@ -42,6 +46,8 @@
                         <!--password set-->
 						<label for="password" class="col-sm-2 col-form-label text-right">密码:</label>
 						<div class="col-sm-10">
+                            <!--从参数中 取得value-->
+                            <!--回显数据 不重置1-->
 							<input type="password" th:class="|form-control ${passwordMsg!=null?'is-invalid':''}|"
 								   th:value="${param.password}"
 								   id="password" name="password" placeholder="请输入您的密码!" required>
@@ -74,6 +80,8 @@
 					<div class="form-group row mt-4">
 						<div class="col-sm-2"></div>
 						<div class="col-sm-10">
+                            <!--从参数中 取得value-->
+                            <!--回显数据 不重置1-->
 							<input type="checkbox" id="remember-me" name="rememberme"
 								   th:checked="${param.rememberme}">
 							<label class="form-check-label" for="remember-me">记住我</label>

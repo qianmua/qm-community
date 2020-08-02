@@ -7,16 +7,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityRegisterStatus;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
@@ -169,12 +167,36 @@ public class LoginController implements CommunityRegisterStatus {
 
         // 包含ticket
         if (login.containsKey("ticket")){
-
+            val cookie = new Cookie("ticket", login.get("ticket").toString());
+            cookie.setPath("/");
+            cookie.setMaxAge(expiredTime);
+            response.addCookie(cookie);
             return "redirect:/index";
         }else {
+            // 未登录
+            model.addAttribute("usernameMsg" , login.get("usernameMsg"));
+            model.addAttribute("passwordMsg" , login.get("passwordMsg"));
             return "site/login";
         }
 
 
     }
+
+
+    /**
+     * 登出
+     * //
+     * 取得 cookie 凭证
+     * 清除 状态
+     * //
+     * @param ticket ticket
+     * @return views
+     */
+    @GetMapping("/logout")
+    public String logout(@CookieValue("ticket")String ticket){
+        userService.logout(ticket);
+        return "redirect:/site/login";
+    }
+
+
 }

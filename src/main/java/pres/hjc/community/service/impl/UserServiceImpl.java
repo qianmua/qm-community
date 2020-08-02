@@ -191,4 +191,14 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
 
         return map;
     }
+
+    /**
+     * 等出
+     * @param ticket ticket
+     */
+    @Override
+    public void logout(String ticket) {
+        // 清除
+        loginTicketMapper.updateStatus(ticket, 1);
+    }
 }
