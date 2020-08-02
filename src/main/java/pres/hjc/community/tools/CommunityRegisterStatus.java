@@ -23,4 +23,16 @@ public interface CommunityRegisterStatus {
      * fail
      */
     int ACTIVACTION_FAILUER = 2;
+
+    /**
+     * 默认超时
+     */
+    int DEFAULT_EXPTRED = 60 * 60 * 12 ;
+
+    /**
+    * 记住我默认超时
+    * 一个月
+    * */
+    int REMEMBER_EXPTRED = 60 * 60 * 24 * 30;
+
 }

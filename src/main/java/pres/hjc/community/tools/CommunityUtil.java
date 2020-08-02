@@ -12,7 +12,7 @@ import java.util.UUID;
  * @date 2020/8/2  16:18
  * @description :
  */
-public class CommunityUnit {
+public class CommunityUtil {
 
 
     /**

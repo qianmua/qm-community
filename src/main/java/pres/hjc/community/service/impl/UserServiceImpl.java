@@ -8,11 +8,13 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import pres.hjc.community.dao.LoginTicketMapper;
 import pres.hjc.community.dao.UserMapper;
+import pres.hjc.community.entity.LoginTicketPO;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityRegisterStatus;
-import pres.hjc.community.tools.CommunityUnit;
+import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.MailClientUtil;
 
 import java.util.Date;
@@ -39,6 +41,9 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
 
     @Autowired
     private TemplateEngine templateEngine;
+
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
 
     @Value("${community.path.domain}")
     String domain;
@@ -90,11 +95,11 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
         }
         // 注册
         // 盐值
-        userPO.setSalt(CommunityUnit.UUID().substring(0,5));
-        userPO.setPassword(CommunityUnit.MD5(userPO.getPassword() + userPO.getSalt()));
+        userPO.setSalt(CommunityUtil.UUID().substring(0,5));
+        userPO.setPassword(CommunityUtil.MD5(userPO.getPassword() + userPO.getSalt()));
         userPO.setType(0);
         userPO.setStatus(0);
-        userPO.setActivationCode(CommunityUnit.UUID());
+        userPO.setActivationCode(CommunityUtil.UUID());
         userPO.setHeaderUrl(String.format("http://images.nowcoder.com/head/%dt.png" , new Random().nextInt(10000)));
         userPO.setCreateTime(new Date());
 
@@ -129,5 +134,61 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
         }
         // 激活失败
         return ACTIVACTION_FAILUER;
+    }
+
+    /**
+     * 登录
+     * @param username username
+     * @param  password password
+     * @param exSeconds exSeconds
+     * @return Map
+     */
+    @Override
+    public Map<String, Object> login(String username , String password , int exSeconds){
+
+        val map = new HashMap<String, Object>(2);
+
+        if (StringUtils.isBlank(password)){
+            map.put("passwordMsg" , "null");
+            return map;
+        }
+        if (StringUtils.isBlank(username)){
+            map.put("usernameMsg" , "null");
+            return map;
+        }
+
+        // 验证账号
+        val userPO = userMapper.selectByName(username);
+        if (userPO == null){
+            map.put("usernameMsg" , "null");
+            return map;
+        }
+        // 注册 了 未激活
+        if (userPO.getStatus() == 0){
+            map.put("usernameMsg" , "null");
+            return map;
+        }
+
+        // 校验密码
+        password = CommunityUtil.MD5(password + userPO.getSalt());
+        if (!password.equals(password)){
+            map.put("usernameMsg" , "null");
+            return map;
+        }
+
+        // 生成凭证
+        val ticketPO = new LoginTicketPO();
+
+        ticketPO.setUserId(userPO.getId());
+        ticketPO.setTicket(CommunityUtil.UUID());
+        ticketPO.setExpired(new Date((System.currentTimeMillis() + exSeconds * 1000)));
+        // 状态
+        ticketPO.setStatus(0);
+
+        loginTicketMapper.insertLoginTicket(ticketPO);
+
+        map.put("ticket" , ticketPO.getTicket());
+
+        return map;
     }
 }

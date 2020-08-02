@@ -5,8 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import pres.hjc.community.junit.AlphaService;
-import pres.hjc.community.tools.CommunityUnit;
+import pres.hjc.community.tools.CommunityUtil;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -163,7 +162,7 @@ public class AlphaController {
     @GetMapping("/cookie/set")
     @ResponseBody
     public String setCookie(HttpServletResponse response){
-        Cookie code = new Cookie("code", CommunityUnit.UUID());
+        Cookie code = new Cookie("code", CommunityUtil.UUID());
         code.setPath("/community/alpha");
         //age
         code.setMaxAge(60 * 10);

@@ -3,6 +3,7 @@ package pres.hjc.community.controller;
 import com.google.code.kaptcha.Producer;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -130,5 +131,50 @@ public class LoginController implements CommunityRegisterStatus {
         } catch (IOException e) {
             log.error("传输失败",e.getMessage());
         }
+    }
+
+    /**
+     * 登录 service
+     * @param username username
+     * @param password password
+     * @param code code
+     * @param rememberme true false
+     * @param model model
+     * @param session session
+     * @param response response
+     * @return views
+     */
+    @PostMapping("/login")
+    public String loginSystem(
+            String username ,
+            String password ,
+            String code , boolean rememberme,
+            Model model ,
+            HttpSession session ,
+            HttpServletResponse response){
+
+        val kaptcha = (String)session.getAttribute("kaptcha");
+        if (StringUtils.isBlank(kaptcha)
+                || StringUtils.isBlank(code)
+                || !kaptcha.equalsIgnoreCase(code)){
+            model.addAttribute("codeMsg" , "验证码错误");
+            return "site/login";
+        }
+
+        // 校验用户
+        int expiredTime = rememberme ? REMEMBER_EXPTRED : DEFAULT_EXPTRED;
+
+        //map<string , object>
+        val login = userService.login(username, password, expiredTime);
+
+        // 包含ticket
+        if (login.containsKey("ticket")){
+
+            return "redirect:/index";
+        }else {
+            return "site/login";
+        }
+
+
     }
 }
