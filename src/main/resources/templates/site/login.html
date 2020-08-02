@@ -13,7 +13,6 @@
 	<div class="nk-container">
 		<!-- 头部 -->
 		<header class="bg-dark sticky-top" th:replace="index::header">
-
 		</header>
 
 		<!-- 内容 -->
@@ -65,7 +64,9 @@
 						</div>
                         <!--ref-->
 						<div class="col-sm-4">
+                            <!--验证码-->
 							<img th:src="@{/site/kaptcha}" id="kaptcha" style="width:100px;height:40px;" class="mr-2"/>
+                            <!---------->
 							<a href="javascript:refresh_kaptcha();" class="font-size-12 align-bottom">刷新验证码</a>
 						</div>
 					</div>
@@ -99,8 +100,12 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 	<script th:src="@{/js/global.js}"></script>
 	<script>
+        /*刷新验证码*/
+
 		function refresh_kaptcha() {
-			var path = CONTEXT_PATH + "/kaptcha?p=" + Math.random();
+		    /*globals*/
+            /* 防止 缓存*/
+			var path = CONTEXT_PATH + "/site/kaptcha?p=" + Math.random();
 			$("#kaptcha").attr("src", path);
 		}
 	</script>

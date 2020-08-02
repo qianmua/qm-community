@@ -1,5 +1,7 @@
 package pres.hjc.community.controller;
 
+import com.google.code.kaptcha.Producer;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,13 @@ import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityRegisterStatus;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
 /**
  * @author HJC
  * @version 1.0
@@ -21,10 +30,14 @@ import pres.hjc.community.tools.CommunityRegisterStatus;
  */
 @Controller
 @RequestMapping("/site")
+@Slf4j
 public class LoginController implements CommunityRegisterStatus {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private Producer producerl;
 
     /**
      * 注册
@@ -94,5 +107,28 @@ public class LoginController implements CommunityRegisterStatus {
         }
 
         return "site/operate-result";
+    }
+
+
+    /**
+     * 生成验证码
+     * @param response
+     * @param session
+     */
+    @GetMapping("/kaptcha")
+    public void getkaptcha(HttpServletResponse response , HttpSession session){
+        //
+        String text = producerl.createText();
+        BufferedImage image = producerl.createImage(text);
+        // 存放验证码
+        session.setAttribute("kaptcha" , text);
+
+        /// 回显验证码
+        response.setContentType("image/png");
+        try (ServletOutputStream stream = response.getOutputStream()){
+            ImageIO.write(image , "png" , stream);
+        } catch (IOException e) {
+            log.error("传输失败",e.getMessage());
+        }
     }
 }
