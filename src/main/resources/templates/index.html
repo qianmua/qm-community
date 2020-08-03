@@ -170,7 +170,8 @@
                         <!--遍历 页面总数-->
                         <!--总是 拿到 所有 数-->
 						<li th:class="|page-item ${i==pageDTO.current?'active':''}|" th:each="i:${#numbers.sequence(pageDTO.from,pageDTO.to)}">
-							<a class="page-link" href="#" th:text="${i}">1</a>
+                            <!--修复 无法选中 bug-->
+							<a class="page-link" th:href="@{${pageDTO.path}(current=${i})}" th:text="${i}">1</a>
 						</li>
                         <!--选中效果-->
 						<li th:class="|page-item ${pageDTO.current==pageDTO.total?'disabled':''}|">
