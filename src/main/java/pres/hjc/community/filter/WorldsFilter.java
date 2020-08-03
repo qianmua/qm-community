@@ -71,7 +71,8 @@ public class WorldsFilter {
             if (null == node1){
                 // 初始化 子节点
                 node1 = new TreeNode();
-                node.addNode(c  , node);
+                // 记录子节点
+                node.addNode(c  , node1);
             }
 
             // 指针 指向当前 节点
