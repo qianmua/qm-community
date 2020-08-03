@@ -184,4 +184,11 @@ public class AlphaController {
     }
 
 
+    @PostMapping("/jsontr")
+    @ResponseBody
+    public String testJson(String name , int age){
+        return CommunityUtil.getJSONString(0 ,"success");
+    }
+
+
 }
