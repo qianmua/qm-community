@@ -49,6 +49,6 @@ mybatis:
 # domain
 community:
     path:
-      domain: localhost:9090
+      domain: http://localhost:9090
       upload: G:\Java_Test\img\img2
 

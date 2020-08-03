@@ -57,7 +57,7 @@ public class HomeController {
             dis.add(hashMap);
         });
 
-        dis.forEach(System.out::println);
+//        dis.forEach(System.out::println);
 
         model.addAttribute("discuss" , dis);
 
