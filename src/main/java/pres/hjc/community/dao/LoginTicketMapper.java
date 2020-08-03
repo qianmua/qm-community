@@ -35,7 +35,7 @@ public interface LoginTicketMapper {
             "select id,user_id,ticket,status,expired ",
             "from login_ticket where ticket=#{ticket}"
     })
-    LoginTicketPO selectByTicket(String ticket);
+    LoginTicketPO selectByTicket( @Param("ticket")String ticket);
 
     /**
      * 更新 ， 生命周期0.0
@@ -54,5 +54,5 @@ public interface LoginTicketMapper {
             "</if>",
             "</script>"
     })
-    int updateStatus(String ticket, int status);
+    int updateStatus(@Param("ticket") String ticket, @Param("status")int status);
 }

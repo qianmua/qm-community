@@ -38,9 +38,9 @@ public class CommunityUtil {
 
     /**
      * json 转换器
-     * @param code code 编码
+     * @param code code 状态码
      * @param msg msg  提示信息
-     * @param map map 数据
+     * @param map map 数据 // 绝的封装一个 处理器 比较好
      * @return json
      */
     public static String getJSONString(int code , String msg , Map<String ,Object> map){
@@ -56,7 +56,7 @@ public class CommunityUtil {
 
     /**
      * json 转换器
-     * @param code 编码
+     * @param code 状态码
      * @param msg 提示信息
      * @return json
      */
@@ -66,7 +66,7 @@ public class CommunityUtil {
 
     /**
      * json 转换器
-     * @param code 编码
+     * @param code 状态码
      * @return json
      */
     public static String getJSONString(int code){

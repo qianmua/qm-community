@@ -35,4 +35,13 @@ public interface DiscussPostMapper {
      * @return rows
      */
     int selectDiscussPostRows(@Param("userId") int userId);
+
+    /**
+     * 添加博客信息
+     * @param discussPostPO discussPostPO
+     * @return rows
+     */
+    int insertDiscussPost(DiscussPostPO discussPostPO);
+
+
 }
