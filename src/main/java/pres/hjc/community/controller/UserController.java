@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,8 +18,11 @@ import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * @author HJC
@@ -84,8 +88,9 @@ public class UserController {
         }
 
         //String fileName
-        val filename = headerImage.getOriginalFilename();
+        var filename = headerImage.getOriginalFilename();
 
+        assert filename != null;
         int lastIndexOf = filename.lastIndexOf(".");
         // jpg png...
         String suffer = filename.substring(lastIndexOf);
@@ -95,7 +100,7 @@ public class UserController {
             return "site/setting";
         }
         // 文件名
-        String s = CommunityUtil.UUID() + suffer;
+        filename = CommunityUtil.UUID() + suffer;
         // upload
         File file = new File(uploadPath + "/" + filename);
         try {
@@ -111,13 +116,48 @@ public class UserController {
         // 虚拟路径
         UserPO po = hostHolder.getUsersPO();
         //fileName // path
-        val s1 = domain + contextPath + "/user/header" + filename;
+        /*+ contextPath*/
+        val s1 = domain  + "/user/header/" + filename;
         userService.uploadHeader( po.getId(), s1);
 
         return "redirect:/index";
     }
 
 
+    /**
+     * 返回 头像
+     * @param fileName fileName
+     * @param response header
+     */
+    @GetMapping("/header/{fileName}")
+    public void getHeader(@PathVariable String fileName , HttpServletResponse response){
+        //location path
+        fileName = uploadPath + "/" + fileName;
+
+        String suffix = fileName.substring(fileName.lastIndexOf("."));
+        //resp type
+        response.setContentType("image/" + suffix);
+
+        // reader File
+        // jdk7 ->
+        try (
+                FileInputStream stream1 = new FileInputStream(fileName);
+                OutputStream stream = response.getOutputStream();
+                ){
+
+            byte[] bytes = new byte[1024];
+            int b = 0;
+            while ( (b = stream1.read(bytes) ) != -1){
+                // 写出
+                stream.write(bytes , 0 , b);
+            }
+
+        } catch (IOException e) {
+            log.error("err read header -> {} " , e.getMessage());
+        }
+
+
+    }
 
 
 

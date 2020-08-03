@@ -1,6 +1,7 @@
 package pres.hjc.community.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import pres.hjc.community.entity.UserPO;
 
 /**
@@ -55,7 +56,7 @@ public interface UserMapper {
      * @param headerUrl headerUrl
      * @return rows
      */
-    int updateHeader(int id, String headerUrl);
+    int updateHeader(@Param("id") int id, @Param("headerUrl") String headerUrl);
 
     /**
      * change password
@@ -63,5 +64,5 @@ public interface UserMapper {
      * @param password password
      * @return rows
      */
-    int updatePassword(int id, String password);
+    int updatePassword(@Param("id")int id, @Param("password")String password);
 }

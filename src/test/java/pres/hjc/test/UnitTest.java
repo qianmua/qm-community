@@ -1,5 +1,6 @@
 package pres.hjc.test;
 
+import lombok.val;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.thymeleaf.context.Context;
 import pres.hjc.community.CommunityBootstrapApplication;
 import pres.hjc.community.dao.UserMapper;
 import pres.hjc.community.tools.MailClientUtil;
+
+import java.util.ArrayList;
 
 /**
  * @author HJC
@@ -51,5 +54,21 @@ public class UnitTest {
         context.setVariable("message" , "guguguugugu");
         String process = templateEngine.process("/mail/demoTemplate", context);
         System.out.println(process);
+    }
+
+
+
+    @Test
+    public void t1(){
+        ArrayList<Integer> integers = new ArrayList<>();
+        integers.add(1);
+        integers.add(2);
+        integers.add(3);
+        integers.add(4);
+
+        val iterator = integers.iterator();
+        while (iterator.hasNext()){
+            System.out.println(iterator.next());
+        }
     }
 }
