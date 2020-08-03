@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
+import pres.hjc.community.annotation.AuthRequired;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityUtil;
@@ -79,6 +80,7 @@ public class UserController {
      * @param model
      * @return
      */
+    @AuthRequired
     @PostMapping("/upload")
     public String uploadHeader(MultipartFile headerImage , Model model){
 
@@ -129,6 +131,7 @@ public class UserController {
      * @param fileName fileName
      * @param response header
      */
+//    @AuthRequired
     @GetMapping("/header/{fileName}")
     public void getHeader(@PathVariable String fileName , HttpServletResponse response){
         //location path
