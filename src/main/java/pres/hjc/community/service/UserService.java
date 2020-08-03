@@ -64,6 +64,9 @@ public interface UserService {
     LoginTicketPO findLoginTicket(String ticket);
 
 
+    int uploadHeader(int userId , String headerUrl);
+
+
 
 
 }

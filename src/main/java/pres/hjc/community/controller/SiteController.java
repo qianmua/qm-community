@@ -30,7 +30,7 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/site")
 @Slf4j
-public class LoginController implements CommunityRegisterStatus {
+public class SiteController implements CommunityRegisterStatus {
 
     @Autowired
     private UserService userService;
@@ -197,6 +197,12 @@ public class LoginController implements CommunityRegisterStatus {
         userService.logout(ticket);
         return "redirect:/site/login";
     }
+
+
+    /*@GetMapping("/profile")
+    public String profileViews(){
+        return "site/profile";
+    }*/
 
 
 }

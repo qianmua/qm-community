@@ -211,4 +211,16 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
     public LoginTicketPO findLoginTicket(String ticket) {
         return loginTicketMapper.selectByTicket(ticket);
     }
+
+
+    /**
+     * 更新 头像
+     * @param userId
+     * @param headerUrl
+     * @return
+     */
+    @Override
+    public int uploadHeader(int userId , String headerUrl){
+        return userMapper.updateHeader(userId, headerUrl);
+    }
 }
