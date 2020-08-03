@@ -2,6 +2,7 @@ package pres.hjc.community.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import lombok.var;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,8 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
+import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityUtil;
+import pres.hjc.community.tools.HostHolder;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author HJC
@@ -29,6 +35,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    private HostHolder hostHolder;
+
     @Value("${community.path.upload}")
     private String uploadPath;
 
@@ -37,6 +46,8 @@ public class UserController {
 
 //    @Value("${server.servlet.context-path}")
     private String contextPath;
+
+
 
 
 
@@ -58,6 +69,12 @@ public class UserController {
         return "site/profile";
     }
 
+    /**
+     * 上传头头像
+     * @param headerImage
+     * @param model
+     * @return
+     */
     @PostMapping("/upload")
     public String uploadHeader(MultipartFile headerImage , Model model){
 
@@ -79,11 +96,31 @@ public class UserController {
         }
         // 文件名
         String s = CommunityUtil.UUID() + suffer;
+        // upload
+        File file = new File(uploadPath + "/" + filename);
+        try {
+            // to local
+            headerImage.transferTo(file);
+        } catch (IOException e) {
+            log.error("upload file fail -> {}" , e.getMessage());
+            throw new RuntimeException("上传文件失败" , e);
+        }
 
+        // 更新路径
+        // web 访问路径
+        // 虚拟路径
+        UserPO po = hostHolder.getUsersPO();
+        //fileName // path
+        val s1 = domain + contextPath + "/user/header" + filename;
+        userService.uploadHeader( po.getId(), s1);
 
-
-        return "site/setting";
+        return "redirect:/index";
     }
+
+
+
+
+
 
 
 
