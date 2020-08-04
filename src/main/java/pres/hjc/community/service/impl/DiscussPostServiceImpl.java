@@ -64,6 +64,6 @@ public class DiscussPostServiceImpl implements DiscussPostService {
 
     @Override
     public int updateCommentCount(int commentCount, int id) {
-        return 0;
+        return discussPostMapper.updateCommentCount(commentCount, id);
     }
 }

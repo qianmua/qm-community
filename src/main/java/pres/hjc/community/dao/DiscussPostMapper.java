@@ -51,7 +51,7 @@ public interface DiscussPostMapper {
     DiscussPostPO selectDiscussPostById(@Param("id") int id);
 
     /**
-     *
+     * 回复列表
      * @param commentCount
      * @param id
      * @return
