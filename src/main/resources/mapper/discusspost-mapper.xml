@@ -37,7 +37,7 @@
         values(#{userId},#{title},#{content},#{type},#{status},#{createTime},#{commentCount},#{score})
     </insert>
 
-    <!--<select id="selectDiscussPostById" resultType="pres.hjc.community.entity.DiscussPostPO">
+    <select id="selectDiscussPostById" resultType="pres.hjc.community.entity.DiscussPostPO">
         select <include refid="selectFields"></include>
         from discuss_post
         where id = #{id}
@@ -45,6 +45,6 @@
 
     <update id="updateCommentCount">
         update discuss_post set comment_count = #{commentCount} where id = #{id}
-    </update>-->
+    </update>
 
 </mapper>
