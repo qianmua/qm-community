@@ -5,14 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pres.hjc.community.dto.PageDTO;
+import pres.hjc.community.entity.CommentPO;
 import pres.hjc.community.entity.DiscussPostPO;
 import pres.hjc.community.entity.UserPO;
+import pres.hjc.community.service.CommentService;
 import pres.hjc.community.service.DiscussPostService;
 import pres.hjc.community.service.UserService;
+import pres.hjc.community.tools.CommunityRegisterStatus;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * @author HJC
@@ -23,7 +27,7 @@ import java.util.Date;
  */
 @Controller
 @RequestMapping("/discuss")
-public class DiscussPostController {
+public class DiscussPostController implements CommunityRegisterStatus {
 
     @Autowired
     DiscussPostService discussPostService;
@@ -34,6 +38,8 @@ public class DiscussPostController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CommentService commentService;
 
     /**
      * 发帖
@@ -69,14 +75,44 @@ public class DiscussPostController {
      * @return
      */
     @GetMapping("/detail/{discussPostId}")
-    public String getDView(@PathVariable int discussPostId , Model model){
+    public String getDView(@PathVariable int discussPostId , Model model , PageDTO pageDTO){
         val postPO = discussPostService.selectDiscussPostById(discussPostId);
 
+        // 帖子
         model.addAttribute("post" , postPO);
 
+        // 作者
         val userPO = userService.selectById(postPO.getUserId());
 
         model.addAttribute("user" , userPO);
+
+        //评论
+        pageDTO.setLimit(10);
+        pageDTO.setPath("/discuss/detail/" + discussPostId);
+        pageDTO.setRows(postPO.getCommentCount());
+
+        // 所有 评论
+        List<CommentPO> commentPOS = commentService.selectCommentsByEntity(
+                ENTITY_TYPE_POST, postPO.getId(), pageDTO.getOffset(), pageDTO.getLimit());
+        List<Map<String , Object>> commentVOs = new ArrayList<>();
+
+        commentPOS.forEach(v1 -> {
+            HashMap<String, Object> vo = new HashMap<>(2);
+            vo.put("comment" , v1);
+            // 评论作者
+            vo.put("user" , userService.selectById(v1.getUserId()));
+
+            // 回复列表
+            //
+            List<CommentPO> pos = commentService.selectCommentsByEntity(
+                    ENTITY_TYPE_COMMENT, v1.getId(), 0, Integer.MAX_VALUE);
+
+
+
+
+            commentVOs.add(vo);
+        });
+
 
 
         return "site/discuss-detail";

@@ -35,4 +35,14 @@ public interface CommunityRegisterStatus {
     * */
     int REMEMBER_EXPTRED = 60 * 60 * 24 * 30;
 
+    /**
+     * 帖子
+     */
+    int ENTITY_TYPE_POST = 1;
+
+    /**
+     * 评论
+     */
+    int ENTITY_TYPE_COMMENT = 2;
+
 }
