@@ -1,6 +1,7 @@
 package pres.hjc.community.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import pres.hjc.community.entity.CommentPO;
 
 import java.util.List;
@@ -24,7 +25,12 @@ public interface CommentMapper {
      * @param limit limit
      * @return list
      */
-    List<CommentPO> selectCommentsByEntity(int entityType, int entityId, int offset, int limit);
+    List<CommentPO> selectCommentsByEntity(
+            @Param("entityType") int entityType,
+            @Param("entityId")int entityId,
+            @Param("offset")int offset,
+            @Param("limit")int limit
+    );
 
     /**
      * 评论 数
@@ -32,7 +38,7 @@ public interface CommentMapper {
      * @param entityId entityId
      * @return rows
      */
-    int selectCountByEntity(int entityType, int entityId);
+    int selectCountByEntity(@Param("entityType")int entityType, @Param("entityId")int entityId);
 
 
     /**
@@ -47,7 +53,7 @@ public interface CommentMapper {
      * @param id id
      * @return obj
      */
-    CommentPO selectCommentById(int id);
+    CommentPO selectCommentById(@Param("id")int id);
 
 
 }

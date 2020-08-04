@@ -101,19 +101,31 @@ public class DiscussPostController implements CommunityRegisterStatus {
             vo.put("comment" , v1);
             // 评论作者
             vo.put("user" , userService.selectById(v1.getUserId()));
-
             // 回复列表
-            //
             List<CommentPO> pos = commentService.selectCommentsByEntity(
                     ENTITY_TYPE_COMMENT, v1.getId(), 0, Integer.MAX_VALUE);
-
-
-
-
+            // VO
+           List<Map<String , Object>> reVO = new ArrayList<>();
+            pos.forEach(v2 -> {
+                // 回复
+                val map = new HashMap<String, Object>(2);
+                map.put("reply" , v2);
+                map.put("user" , userService.selectById(v2.getUserId()));
+                // 回复目标
+                UserPO po = v2.getTargetId() == 0 ? null : userService.selectById(v2.getTargetId());
+                map.put("target" , po);
+                reVO.add(map);
+            });
+            // 回复
+            vo.put("replys" , reVO);
+            //回复数量
+            val count = commentService.selectCountByEntity(ENTITY_TYPE_COMMENT, v1.getId());
+            vo.put("replyCount" , count);
+            // =========================
             commentVOs.add(vo);
         });
 
-
+        model.addAttribute("comments" , commentVOs);
 
         return "site/discuss-detail";
 
