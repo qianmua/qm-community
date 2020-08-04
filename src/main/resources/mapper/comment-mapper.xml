@@ -8,6 +8,7 @@
         id, user_id, entity_type, entity_id, target_id, content, status, create_time
     </sql>
 
+    <!--插入字段-->
     <sql id="insertFields">
         user_id, entity_type, entity_id, target_id, content, status, create_time
     </sql>
