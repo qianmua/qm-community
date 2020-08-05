@@ -82,7 +82,7 @@ public class LoginTicketHandlerInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         // obj userPO
         val po = hostHolder.getUsersPO();
-        log.info("po -> {} " , po);
+//        log.info("po -> {} " , po);
 
         if (null != po && modelAndView != null){
             modelAndView.addObject("loginUser" , po);
