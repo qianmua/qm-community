@@ -36,6 +36,12 @@ spring:
     restart:
       enabled: true
 
+  # redis
+  # RedisAutoConfiguration
+  # redisProperties
+  redis:
+    host: 192.168.0.1
+    password: 123456
 
 # mybatis config
 mybatis:
@@ -54,6 +60,3 @@ community:
 
 
 
-# redis
-# RedisAutoConfiguration
-# redisProperties
