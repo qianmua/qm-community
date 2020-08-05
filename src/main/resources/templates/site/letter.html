@@ -112,7 +112,7 @@
 							</h6>
 							<div>
                                 <!--私信内容-->
-								<a th:href="@{|/letter/detail/${map.conversation.conversationId}|}" th:utext="${map.conversation.content}">hello world</a>
+								<a th:href="@{|/message/letter/detail/${map.conversation.conversationId}|}" th:utext="${map.conversation.content}">hello world</a>
 								<ul class="d-inline font-size-12 float-right">
                                     <!--私信 条数-->
 									<li class="d-inline ml-2"><a href="#" class="text-primary">共<i th:text="${map.letterCount}">5</i>条会话</a></li>

@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pres.hjc.community.dto.PageDTO;
+import pres.hjc.community.entity.MessagePO;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.MessageService;
 import pres.hjc.community.service.UserService;
@@ -14,6 +16,7 @@ import pres.hjc.community.tools.HostHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,9 +46,9 @@ public class MessageController {
 
     /**
      * 私信 列表
-     * @param model
-     * @param pageDTO
-     * @return
+     * @param model model
+     * @param pageDTO  pageDTO
+     * @return views
      */
     @GetMapping("/letter/list")
     public String getLetterList(Model model , PageDTO pageDTO){
@@ -91,6 +94,64 @@ public class MessageController {
         model.addAttribute("conversations" , cov);
 
         return "site/letter";
+    }
+
+    /**
+     * 消息查看
+     * @param convId convId
+     * @param pageDTO pageDTO
+     * @return views
+     */
+    @GetMapping("/letter/detail/{convId}")
+    public String getLetterDetail(@PathVariable String convId , PageDTO pageDTO ,Model model){
+        pageDTO.setLimit(5);
+        pageDTO.setPath("/message/letter/detail/" + convId);
+        // 当前消息
+        //消息数
+        pageDTO.setRows(messageService.selectLetterCount(convId));
+
+        //私信列表
+        List<MessagePO> pos = messageService.selectLetters(convId, pageDTO.getOffset(), pageDTO.getLimit());
+
+        //VO
+        ArrayList<Map<String, Object>> letters = new ArrayList<>();
+
+        pos.forEach(v1 -> {
+            val map = new HashMap<String, Object>(2);
+
+            map.put("letter" , v1);
+            map.put("fromUser" , userService.selectById(v1.getFromId()));
+
+            letters.add(map);
+        });
+
+
+        model.addAttribute("letters" , letters);
+        model.addAttribute("target" , getLetterTarget(convId));
+
+        return "site/letter-detail";
+    }
+
+
+    /**
+     * 得到私信目标
+     * ID_ID
+     * @param conversationId conversationId
+     * @return
+     */
+    private UserPO getLetterTarget(String conversationId){
+
+        // String[]
+        val strings = conversationId.split("_");
+
+        val d0 = Integer.parseInt(strings[0]);
+        val d1 = Integer.parseInt(strings[1]);
+        // 目标是d1
+        //或者 do
+        // 双方互相
+        return hostHolder.getUsersPO().getId() == d0 ?
+                userService.selectById(d1) : userService.selectById(d0);
+
     }
 
 
