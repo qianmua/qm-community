@@ -190,5 +190,13 @@ public class AlphaController {
         return CommunityUtil.getJSONString(0 ,"success");
     }
 
+    @GetMapping("/err404")
+    public String err404(){
+        return "site/error/404";
+    }
+    @GetMapping("/err500")
+    public String err500(){
+        return "site/error/500";
+    }
 
 }

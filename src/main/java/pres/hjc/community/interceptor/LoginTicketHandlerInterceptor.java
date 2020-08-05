@@ -61,7 +61,7 @@ public class LoginTicketHandlerInterceptor implements HandlerInterceptor {
             return true;
         }
         UserPO po = userService.selectById(ticket.getUserId());
-        log.info("user -> {}" , po);
+//        log.info("user -> {}" , po);
         // 请求开始 便持有并  缓存
         // 持有 用户
         // cache
