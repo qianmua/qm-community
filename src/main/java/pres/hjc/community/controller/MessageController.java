@@ -54,7 +54,8 @@ public class MessageController {
 
         pageDTO.setLimit(5);
         /*message/ */
-        pageDTO.setPath("/letter/list");
+        /*分页路径*/
+        pageDTO.setPath("/message/letter/list");
         pageDTO.setRows(messageService.selectConversationCount(po.getId()));
 
         // 会话列表
@@ -67,7 +68,7 @@ public class MessageController {
         pos.forEach(v1 -> {
             HashMap<String, Object> hashMap = new HashMap<>();
 
-            hashMap.put("conversations" , v1);
+            hashMap.put("conversation" , v1);
             // 未读消息
             hashMap.put("unreadCount" , messageService.selectLetterUnreadCount(po.getId() , v1.getConversationId()));
 
@@ -87,7 +88,7 @@ public class MessageController {
         // 未读消息 总数
         val unreadCount = messageService.selectLetterUnreadCount(po.getId(), null);
         model.addAttribute("letterUnreadCount" , unreadCount);
-        model.addAttribute("conversation" , cov);
+        model.addAttribute("conversations" , cov);
 
         return "site/letter";
     }
