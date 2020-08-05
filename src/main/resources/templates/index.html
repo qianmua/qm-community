@@ -141,7 +141,7 @@
 							<h6 class="mt-0 mb-3">
                                 <!--标题-->
                                 <!--跳转到 具体 数据页-->
-								<a th:href="@{|/discuss/detail/${map.post.id}|}" th:utext="${map.post.title}">加油复习 拿到 offer ！</a>
+								<a th:href="@{|/discuss/detail/${map.post.id}|}" th:utext="${map.post.title}">[title]</a>
                                 <!--tag-->
 								<span class="badge badge-secondary bg-primary" th:if="${map.post.type==1}">置顶</span>
                                 <!--tag-->
@@ -149,13 +149,13 @@
 							</h6>
 							<div class="text-muted font-size-12">
                                 <!--摘要info-->
-								<u class="mr-3" th:utext="${map.user.username}">寒江雪</u> 发布于 <b th:text="${#dates.format(map.post.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</b>
+								<u class="mr-3" th:utext="${map.user.username}">[user]</u> 发布于 <b th:text="${#dates.format(map.post.createTime,'yyyy-MM-dd HH:mm:ss')}">[time]</b>
                                 <!--无用列表-->
-								<ul class="d-inline float-right">
-									<li class="d-inline ml-2">赞 11</li>
-									<li class="d-inline ml-2">|</li>
-									<li class="d-inline ml-2">回帖 <span th:text="${map.post.commentCount}">0</span></li>
-								</ul>
+                                <ul class="d-inline float-right">
+                                    <li class="d-inline ml-2">赞 <span th:text="${map.likeCount}">0</span></li>
+                                    <li class="d-inline ml-2">|</li>
+                                    <li class="d-inline ml-2">回帖 <span th:text="${map.post.commentCount}">0</span></li>
+                                </ul>
 							</div>
 						</div>						
 					</li>

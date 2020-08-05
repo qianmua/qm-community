@@ -11,6 +11,7 @@ import pres.hjc.community.entity.DiscussPostPO;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.CommentService;
 import pres.hjc.community.service.DiscussPostService;
+import pres.hjc.community.service.LikeService;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityRegisterStatus;
 import pres.hjc.community.tools.CommunityUtil;
@@ -40,6 +41,9 @@ public class DiscussPostController implements CommunityRegisterStatus {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private LikeService likeService;
 
     /**
      * 发帖
@@ -84,6 +88,21 @@ public class DiscussPostController implements CommunityRegisterStatus {
         // 作者
         val userPO = userService.selectById(postPO.getUserId());
 
+        // 点赞
+        // type
+        // id (帖子Id)
+        long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, discussPostId);
+        model.addAttribute("likeCount" , likeCount);
+        // 状态
+        // 当前用户 的 带你赞状态
+        // 注意不是 帖子作者
+
+        int likeStatus = hostHolder.getUsersPO() == null ? 0 :
+                likeService.findEntityLikeStatus(
+                hostHolder.getUsersPO().getId(),ENTITY_TYPE_POST , discussPostId);
+        model.addAttribute("likeStatus" , likeStatus);
+
+
         model.addAttribute("user" , userPO);
 
         //评论
@@ -101,6 +120,14 @@ public class DiscussPostController implements CommunityRegisterStatus {
             vo.put("comment" , v1);
             // 评论作者
             vo.put("user" , userService.selectById(v1.getUserId()));
+
+            // 点赞
+            vo.put("likeCount" , likeService.findEntityLikeCount(ENTITY_TYPE_COMMENT, v1.getId()));
+            //状态
+            vo.put("likeStatus" , hostHolder.getUsersPO() == null ? 0 :
+                    likeService.findEntityLikeStatus(
+                            hostHolder.getUsersPO().getId(),ENTITY_TYPE_COMMENT, v1.getId()));
+
             // 回复列表
             List<CommentPO> pos = commentService.selectCommentsByEntity(
                     ENTITY_TYPE_COMMENT, v1.getId(), 0, Integer.MAX_VALUE);
@@ -111,6 +138,15 @@ public class DiscussPostController implements CommunityRegisterStatus {
                 val map = new HashMap<String, Object>(2);
                 map.put("reply" , v2);
                 map.put("user" , userService.selectById(v2.getUserId()));
+
+                // 点赞
+                map.put("likeCount" , likeService.findEntityLikeCount(ENTITY_TYPE_COMMENT, v2.getId()));
+                //状态
+                map.put("likeStatus" , hostHolder.getUsersPO() == null ? 0 :
+                        likeService.findEntityLikeStatus(
+                                hostHolder.getUsersPO().getId(),ENTITY_TYPE_COMMENT, v2.getId()));
+
+
                 // 回复目标
                 UserPO po = v2.getTargetId() == 0 ? null : userService.selectById(v2.getTargetId());
                 map.put("target" , po);

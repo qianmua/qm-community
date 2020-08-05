@@ -8,7 +8,9 @@ import pres.hjc.community.dto.PageDTO;
 import pres.hjc.community.entity.DiscussPostPO;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.DiscussPostService;
+import pres.hjc.community.service.LikeService;
 import pres.hjc.community.service.UserService;
+import pres.hjc.community.tools.CommunityRegisterStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,13 +25,17 @@ import java.util.Map;
  * @description :
  */
 @Controller
-public class HomeController {
+public class HomeController implements CommunityRegisterStatus {
 
     @Autowired
     private DiscussPostService discussPostService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    LikeService likeService;
+
 
     /**
      * 首页
@@ -54,6 +60,10 @@ public class HomeController {
             hashMap.put("post" , it);
             UserPO po = userService.selectById(it.getUserId());
             hashMap.put("user" , po);
+
+            long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, it.getId());
+            hashMap.put("likeCount" , likeCount);
+
             dis.add(hashMap);
         });
 

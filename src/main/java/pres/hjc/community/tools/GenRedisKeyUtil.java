@@ -25,6 +25,12 @@ public class GenRedisKeyUtil {
      * //
      * 某个 实体的赞
      *
+     * entityType:
+     * 回复 2
+     * 帖子 1
+     * ..
+     *
+     *
      * like:entity:entityType:id
      * set方式
      * @param entityType entityType

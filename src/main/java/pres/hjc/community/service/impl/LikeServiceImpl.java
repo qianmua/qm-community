@@ -30,7 +30,6 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public void like(int userId, int entityType, int entityId, int entityUserId) {
         String entityLikeKey = GenRedisKeyUtil.getEntityLikeKey(entityType , entityId);
-
         // 点赞
         // 第一次 +1
 
@@ -45,9 +44,10 @@ public class LikeServiceImpl implements LikeService {
             // 点赞
             redisTemplate.opsForSet().add(entityLikeKey , userId);
         }
+    }
 
-
-
+    public void like(int userId, int entityType, int entityId) {
+       like(userId, entityType, entityId , 0);
     }
 
     /**
