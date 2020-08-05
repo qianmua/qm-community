@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import pres.hjc.community.annotation.AuthRequired;
 import pres.hjc.community.service.LikeService;
 import pres.hjc.community.tools.CommunityUtil;
@@ -20,8 +21,10 @@ import java.util.HashMap;
  * @date 2020/8/5  22:30
  * @description :
  */
-@Controller
+@RestController
+//@Controller
 //@RequestMapping("/like")
+
 public class LikeController {
 
     @Autowired
@@ -50,6 +53,5 @@ public class LikeController {
         map.put("likeStatus" , likeStatus);
 
         return CommunityUtil.getJSONString(200 , null , map);
-
     }
 }
