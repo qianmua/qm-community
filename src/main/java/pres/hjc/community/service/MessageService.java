@@ -25,7 +25,7 @@ public interface MessageService {
 
     int insertMessage(MessagePO message);
 
-    int updateStatus(List<Integer> ids, int status);
+    int updateStatus(List<Integer> ids);
 
     MessagePO selectLatestNotice(int userId, String topic);
 

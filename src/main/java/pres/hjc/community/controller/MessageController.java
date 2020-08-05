@@ -4,20 +4,16 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pres.hjc.community.dto.PageDTO;
 import pres.hjc.community.entity.MessagePO;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.MessageService;
 import pres.hjc.community.service.UserService;
+import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author HJC
@@ -125,11 +121,33 @@ public class MessageController {
             letters.add(map);
         });
 
-
         model.addAttribute("letters" , letters);
+        // 目标
         model.addAttribute("target" , getLetterTarget(convId));
 
+        // 消费私信
+        val ids = getLetterIds(pos);
+        if (!ids.isEmpty()){
+            messageService.updateStatus(ids);
+        }
+
         return "site/letter-detail";
+    }
+
+    /**
+     * 消费私信
+     * @param letterList letterList
+     * @return
+     */
+    private List<Integer> getLetterIds(List<MessagePO> letterList){
+        val list = new ArrayList<Integer>();
+        letterList.forEach(v1 -> {
+            // 未消费列表
+            if (hostHolder.getUsersPO().getId() == v1.getToId() && v1.getStatus() == 0){
+                list.add(v1.getId());
+            }
+        });
+        return list;
     }
 
 
@@ -151,7 +169,41 @@ public class MessageController {
         // 双方互相
         return hostHolder.getUsersPO().getId() == d0 ?
                 userService.selectById(d1) : userService.selectById(d0);
+    }
 
+
+    /**
+     * 发送私信
+     * @param toName toName
+     * @param content content
+     * @return status
+     */
+    @PostMapping("/letter/send")
+    @ResponseBody
+    public String sendLetter(String toName , String content){
+        val userPO = userService.selectByName(toName);
+
+        if (null == userPO){
+            return CommunityUtil.getJSONString(404 , "目标用户不存在");
+        }
+        // 构造基本 数据
+        val messagePO = new MessagePO();
+        messagePO.setFromId(hostHolder.getUsersPO().getId());
+        messagePO.setToId(userPO.getId());
+
+        // 会话ID
+        messagePO.setConversationId(
+                messagePO.getFromId() < messagePO.getToId() ?
+                        messagePO.getFromId() + "_" + messagePO.getToId():
+                        messagePO.getToId() + "_" + messagePO.getFromId()
+        );
+
+        messagePO.setContent( content);
+        messagePO.setCreateTime(new Date());
+
+        messageService.insertMessage(messagePO);
+
+        return CommunityUtil.getJSONString(0);
     }
 
 

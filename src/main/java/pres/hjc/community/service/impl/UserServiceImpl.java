@@ -223,4 +223,19 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
     public int uploadHeader(int userId , String headerUrl){
         return userMapper.updateHeader(userId, headerUrl);
     }
+
+    @Override
+    public UserPO selectByName(String username) {
+        return userMapper.selectByName(username);
+    }
+
+    @Override
+    public UserPO selectByEmail(String email) {
+        return userMapper.selectByEmail(email);
+    }
+
+    @Override
+    public int updateHeader(int id, String headerUrl) {
+        return userMapper.updateHeader(id, headerUrl);
+    }
 }

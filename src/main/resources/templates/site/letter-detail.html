@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
 	<link rel="stylesheet" th:href="@{/css/global.css}" />
 	<link rel="stylesheet" th:href="@{/css/letter.css}" />
-	<title>牛客网-私信详情</title>
+	<title>谦牧社区-私信详情</title>
 </head>
 <body>
 	<div class="nk-container">
@@ -24,6 +24,7 @@
 						<h6><b class="square"></b> 来自 <i class="text-success" th:utext="${target.username}">[?]</i> 的私信</h6>
 					</div>
 					<div class="col-4 text-right">
+                        <!--to view-->
 						<button type="button" class="btn btn-secondary btn-sm" onclick="back();">返回</button>
 						<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#sendModal">给TA私信</button>
 					</div>
@@ -44,6 +45,11 @@
 								<form>
 									<div class="form-group">
 										<label for="recipient-name" class="col-form-label">发给：</label>
+                                        <!--发送目标 不可修改-->
+                                        <!--你改一个试试 - - ！-->
+                                        <!-- 这样写 有点 bug /-->
+                                        <!--但是 问题不大 一般人没事 改我代码干嘛-->
+                                        <!--我淦！-->
 										<input disabled type="text" class="form-control" id="recipient-name" th:value="${target.username}">
 									</div>
 									<div class="form-group">

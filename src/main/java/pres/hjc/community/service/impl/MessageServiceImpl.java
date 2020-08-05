@@ -3,8 +3,10 @@ package pres.hjc.community.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 import pres.hjc.community.dao.MessageMapper;
 import pres.hjc.community.entity.MessagePO;
+import pres.hjc.community.filter.WorldsFilter;
 import pres.hjc.community.service.MessageService;
 
 import java.util.List;
@@ -22,6 +24,8 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private MessageMapper messageMapper;
+    @Autowired
+    WorldsFilter worldsFilter;
 
 
 
@@ -52,12 +56,15 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public int insertMessage(MessagePO message) {
+        // 过滤
+        message.setContent(HtmlUtils.htmlEscape(message.getContent()));
+        message.setContent(worldsFilter.filter(message.getContent()));
         return messageMapper.insertMessage(message);
     }
 
     @Override
-    public int updateStatus(List<Integer> ids, int status) {
-        return messageMapper.updateStatus(ids, status);
+    public int updateStatus(List<Integer> ids) {
+        return messageMapper.updateStatus(ids, 1);
     }
 
     @Override
