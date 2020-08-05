@@ -19,26 +19,36 @@
 		<div class="main">
 			<div class="container">
 				<div class="position-relative">
+
 					<!-- 选项 -->
 					<ul class="nav nav-tabs mb-3">
 						<li class="nav-item">
-							<a class="nav-link position-relative active" th:href="@{/letter/list}">
-								朋友私信<span class="badge badge-danger" th:text="${letterUnreadCount}" th:if="${letterUnreadCount!=0}">3</span>
+                            <!--刷新私信列表-->
+							<a class="nav-link position-relative active" th:href="@{/message/letter/list}">
+                                <!--私信 总数-->
+								朋友私信<span class="badge badge-danger" th:text="${letterUnreadCount}" th:if="${letterUnreadCount!=0}">0</span>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link position-relative" th:href="@{/notice/list}">
-								系统通知<span class="badge badge-danger" th:text="${noticeUnreadCount}" th:if="${noticeUnreadCount!=0}">27</span>
+                            <!--刷新通知列表-->
+							<a class="nav-link position-relative" th:href="@{/message/notice/list}">
+                                <!--私信 总数-->
+								系统通知<span class="badge badge-danger" th:text="${noticeUnreadCount}" th:if="${noticeUnreadCount!=0}">0</span>
 							</a>
 						</li>
 					</ul>
 					<button type="button" class="btn btn-primary btn-sm position-absolute rt-0" data-toggle="modal" data-target="#sendModal">发私信</button>
 				</div>
 				<!-- 弹出框 -->
+                <!--发送私信-->
+                <!--私信给 指定用户-->
+                <!--后期 kafka 优化-->
+                <!-- 异步消费，没钱玩 啊~~~~~~~-->
 				<div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 					<div class="modal-dialog modal-lg" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
+                                <!--发送-->
 								<h5 class="modal-title" id="exampleModalLabel">发私信</h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
@@ -46,10 +56,12 @@
 							</div>
 							<div class="modal-body">
 								<form>
+                                    <!--to-->
 									<div class="form-group">
 										<label for="recipient-name" class="col-form-label">发给：</label>
 										<input type="text" class="form-control" id="recipient-name">
 									</div>
+                                    <!--content-->
 									<div class="form-group">
 										<label for="message-text" class="col-form-label">内容：</label>
 										<textarea class="form-control" id="message-text" rows="10"></textarea>
@@ -64,6 +76,8 @@
 					</div>
 				</div>		
 				<!-- 提示框 -->
+                <!--SUCCESS-->
+                <!---->
 				<div class="modal fade" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel" aria-hidden="true">
 					<div class="modal-dialog modal-lg" role="document">
 						<div class="modal-content">
@@ -79,19 +93,27 @@
 				
 				<!-- 私信列表 -->
 				<ul class="list-unstyled">
+                    <!-------->
 					<li class="media pb-3 pt-3 mb-3 border-bottom position-relative" th:each="map:${conversations}">
-						<span class="badge badge-danger" th:text="${map.unreadCount}" th:if="${map.unreadCount!=0}">3</span>
+						<span class="badge badge-danger" th:text="${map.unreadCount}" th:if="${map.unreadCount!=0}">0</span>
+                        <!--头像-->
+                        <!--个人 信息 面-->
 						<a href="profile.html">
 							<img th:src="${map.target.headerUrl}" class="mr-4 rounded-circle user-header" alt="用户头像" >
 						</a>
 						<div class="media-body">
 							<h6 class="mt-0 mb-3">
-								<span class="text-success" th:utext="${map.target.username}">落基山脉下的闲人</span>
+                                <!--userName-->
+                                <!--好吧-->
+								<span class="text-success" th:utext="${map.target.username}">[用户名]</span>
+                                <!--发送日期-->
 								<span class="float-right text-muted font-size-12" th:text="${#dates.format(map.conversation.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</span>
 							</h6>
 							<div>
-								<a th:href="@{|/letter/detail/${map.conversation.conversationId}|}" th:utext="${map.conversation.content}">米粉车, 你来吧!</a>
+                                <!--私信内容-->
+								<a th:href="@{|/letter/detail/${map.conversation.conversationId}|}" th:utext="${map.conversation.content}">hello world</a>
 								<ul class="d-inline font-size-12 float-right">
+                                    <!--私信 条数-->
 									<li class="d-inline ml-2"><a href="#" class="text-primary">共<i th:text="${map.letterCount}">5</i>条会话</a></li>
 								</ul>
 							</div>
@@ -100,17 +122,6 @@
 				</ul>
 				<!-- 分页 -->
 				<nav class="mt-5" th:replace="index::pagination">
-					<ul class="pagination justify-content-center">
-						<li class="page-item"><a class="page-link" href="#">首页</a></li>
-						<li class="page-item disabled"><a class="page-link" href="#">上一页</a></li>
-						<li class="page-item active"><a class="page-link" href="#">1</a></li>
-						<li class="page-item"><a class="page-link" href="#">2</a></li>
-						<li class="page-item"><a class="page-link" href="#">3</a></li>
-						<li class="page-item"><a class="page-link" href="#">4</a></li>
-						<li class="page-item"><a class="page-link" href="#">5</a></li>
-						<li class="page-item"><a class="page-link" href="#">下一页</a></li>
-						<li class="page-item"><a class="page-link" href="#">末页</a></li>
-					</ul>
 				</nav>
 			</div>
 		</div>
@@ -121,7 +132,7 @@
 	</div>
 
 	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 	<script th:src="@{/js/global.js}"></script>
 	<script th:src="@{/js/letter.js}"></script>
