@@ -65,7 +65,7 @@ public class MessageController {
         ArrayList<Map<String, Object>> cov = new ArrayList<>();
 
         pos.forEach(v1 -> {
-            HashMap<String, Object> hashMap = new HashMap<>();
+            HashMap<String, Object> hashMap = new HashMap<>(8);
 
             hashMap.put("conversation" , v1);
             // 未读消息
@@ -82,7 +82,6 @@ public class MessageController {
             cov.add(hashMap);
 
         });
-
 
         // 未读消息 总数
         val unreadCount = messageService.selectLetterUnreadCount(po.getId(), null);

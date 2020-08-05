@@ -51,7 +51,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public int selectLetterUnreadCount(int userId, String conversationId) {
-        return messageMapper.selectNoticeUnreadCount(userId, conversationId);
+        return messageMapper.selectLetterUnreadCount(userId, conversationId);
     }
 
     @Override
@@ -84,6 +84,6 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<MessagePO> selectNotices(int userId, String topic, int offset, int limit) {
-        return null;
+        return messageMapper.selectNotices(userId, topic, offset, limit);
     }
 }
