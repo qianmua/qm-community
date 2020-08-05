@@ -52,3 +52,8 @@ community:
       domain: http://localhost:9090
       upload: G:\Java_Test\img\img2
 
+
+
+# redis
+# RedisAutoConfiguration
+# redisProperties

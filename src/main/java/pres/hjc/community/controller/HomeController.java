@@ -64,5 +64,14 @@ public class HomeController {
         return "index";
     }
 
+    /**
+     * 错误页
+     * @return view
+     */
+    @GetMapping("/error")
+    public String errorView(){
+        return "error/500";
+    }
+
 
 }
