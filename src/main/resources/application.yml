@@ -41,9 +41,9 @@ spring:
   # redisProperties
   redis:
     # 192.168.0.1
-    host:
+    host: 47.96.230.44
       # 123456
-    password:
+    password: my_redis1.
 
 # mybatis config
 mybatis:

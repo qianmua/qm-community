@@ -59,7 +59,7 @@ public class HomeController implements CommunityRegisterStatus {
 
         // 封装
         pos.forEach( it -> {
-            HashMap<String, Object> hashMap = new HashMap<>(2);
+            HashMap<String, Object> hashMap = new HashMap<>(8);
             hashMap.put("post" , it);
             UserPO po = userService.selectById(it.getUserId());
             hashMap.put("user" , po);

@@ -5,16 +5,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import pres.hjc.community.dao.LoginTicketMapper;
 import pres.hjc.community.dao.UserMapper;
 import pres.hjc.community.entity.LoginTicketPO;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityRegisterStatus;
 import pres.hjc.community.tools.CommunityUtil;
+import pres.hjc.community.tools.GenRedisKeyUtil;
 import pres.hjc.community.tools.MailClientUtil;
 
 import java.util.Date;
@@ -42,8 +43,11 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
     @Autowired
     private TemplateEngine templateEngine;
 
+//    @Autowired
+//    private LoginTicketMapper loginTicketMapper;
+
     @Autowired
-    private LoginTicketMapper loginTicketMapper;
+    private RedisTemplate redisTemplate;
 
     @Value("${community.path.domain}")
     String domain;
@@ -53,8 +57,8 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
 
     /**
      * by id
-     * @param id
-     * @return
+     * @param id id
+     * @return obj
      */
     @Override
     public UserPO selectById(int id) {
@@ -64,8 +68,8 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
 
     /**
      * 注册
-     * @param user
-     * @return
+     * @param user user
+     * @return obj
      */
     @Override
     public Map<String, Object> insertUser(UserPO user) {
@@ -75,8 +79,8 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
 
     /**
      * 注册
-     * @param userPO
-     * @return
+     * @param userPO userPO
+     * @return obj
      */
     public Map<String , Object> register(UserPO userPO){
         HashMap<String, Object> map = new HashMap<>(2);
@@ -146,7 +150,7 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
     @Override
     public Map<String, Object> login(String username , String password , int exSeconds){
 
-        val map = new HashMap<String, Object>(2);
+        val map = new HashMap<String, Object>(8);
 
         if (StringUtils.isBlank(password)){
             map.put("passwordMsg" , "null");
@@ -185,7 +189,12 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
         // 状态
         ticketPO.setStatus(0);
 
-        loginTicketMapper.insertLoginTicket(ticketPO);
+        // 保存凭证
+//        loginTicketMapper.insertLoginTicket(ticketPO);
+
+        //redis
+        String key = GenRedisKeyUtil.getTicketKey(ticketPO.getTicket());
+        redisTemplate.opsForValue().set(key , ticketPO);
 
         map.put("ticket" , ticketPO.getTicket());
 
@@ -199,17 +208,30 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
     @Override
     public void logout(String ticket) {
         // 清除
-        loginTicketMapper.updateStatus(ticket, 1);
+//        loginTicketMapper.updateStatus(ticket, 1);
+
+        //redis
+        String key = GenRedisKeyUtil.getTicketKey(ticket);
+        LoginTicketPO ticketPO = (LoginTicketPO) redisTemplate.opsForValue().get(key);
+        // 状态
+        // 0 login
+        // 1 loginout
+        ticketPO.setStatus(1);
+        redisTemplate.opsForValue().set(key , ticketPO);
+
     }
 
     /**
-     *
+     *  取出凭证
      * @param ticket ticket
      * @return ob
      */
     @Override
     public LoginTicketPO findLoginTicket(String ticket) {
-        return loginTicketMapper.selectByTicket(ticket);
+        String key = GenRedisKeyUtil.getTicketKey(ticket);
+
+//        return loginTicketMapper.selectByTicket(ticket);
+        return (LoginTicketPO) redisTemplate.opsForValue().get(key);
     }
 
 

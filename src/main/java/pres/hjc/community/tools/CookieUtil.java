@@ -36,4 +36,19 @@ public class CookieUtil {
         }
         return null;
     }
+
+    public static void removeValue(HttpServletRequest request, String key){
+        if (StringUtils.isBlank(key)){
+            return;
+        }
+
+        val cookies = request.getCookies();
+        if( cookies != null){
+            for (Cookie cookie : cookies) {
+                if (key.equals(cookie.getName())){
+                    cookie.setMaxAge(0);
+                }
+            }
+        }
+    }
 }

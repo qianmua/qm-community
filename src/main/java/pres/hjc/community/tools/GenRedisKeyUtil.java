@@ -12,26 +12,56 @@ public class GenRedisKeyUtil {
     /**
      * 分隔符号
      */
-    public static final String SPLIT = ":";
+    private static final String SPLIT = ":";
 
     /**
      * 点赞 喜欢
      */
-    public static final String PREFIX_ENTITY_LIKE = "like:entity";
+    private static final String PREFIX_ENTITY_LIKE = "like:entity";
     /**
      * 用户 点赞
      */
-    public static final String PREFIX_USER_LIKE = "like:user";
+    private static final String PREFIX_USER_LIKE = "like:user";
 
     /**
      *
      * 我关注的
      */
-    public static final String PREFIX_FOLLOWEE = "followee";
+    private static final String PREFIX_FOLLOWEE = "followee";
     /**
      * 关注我的
      */
-    public static final String PREFIX_FOLLOWER = "follower";
+    private static final String PREFIX_FOLLOWER = "follower";
+
+    /**
+     * 验证码
+     */
+    private static final String PREFIX_KAPTCHA = "kaptcha";
+
+    /**
+     * 凭证
+     */
+    private static final String PREFIX_TICKET = "ticket";
+
+    /**
+     * 登录凭证
+     * @param ticket ticket
+     * @return key
+     */
+    public static String getTicketKey(String ticket){
+        return PREFIX_TICKET +SPLIT + ticket;
+    }
+
+    /**
+     * 登录 验证码
+     * @param owner 用户标识
+     * @return key
+     */
+    public static String getKaptchaKey(String owner){
+        return PREFIX_KAPTCHA + SPLIT + owner;
+    }
+
+
 
 
     /**

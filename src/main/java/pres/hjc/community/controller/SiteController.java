@@ -5,20 +5,26 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityRegisterStatus;
+import pres.hjc.community.tools.CommunityUtil;
+import pres.hjc.community.tools.CookieUtil;
+import pres.hjc.community.tools.GenRedisKeyUtil;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author HJC
@@ -37,6 +43,9 @@ public class SiteController implements CommunityRegisterStatus {
 
     @Autowired
     private Producer producerl;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 注册
@@ -112,15 +121,27 @@ public class SiteController implements CommunityRegisterStatus {
     /**
      * 生成验证码
      * @param response
-     * @param session
+     * //@param session
      */
     @GetMapping("/kaptcha")
-    public void getkaptcha(HttpServletResponse response , HttpSession session){
+    public void getkaptcha(HttpServletResponse response  /*,HttpSession session*/){
         //
         String text = producerl.createText();
         BufferedImage image = producerl.createImage(text);
         // 存放验证码
-        session.setAttribute("kaptcha" , text);
+//        session.setAttribute("kaptcha" , text);
+
+        //redis
+        // 授予  实体
+        String kapatchaOwner = CommunityUtil.UUID();
+        Cookie cookie = new Cookie("kaptchaOwner", kapatchaOwner);
+        cookie.setMaxAge(60);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        String redisKey = GenRedisKeyUtil.getKaptchaKey(kapatchaOwner);
+        // 验证码 有效时间
+        redisTemplate.opsForValue().set(redisKey ,text , 60 , TimeUnit.SECONDS);
 
         /// 回显验证码
         response.setContentType("image/png");
@@ -138,7 +159,8 @@ public class SiteController implements CommunityRegisterStatus {
      * @param code code
      * @param rememberme true false
      * @param model model
-     * @param session session
+     * // @param session session
+     * @param kaptchaOwner cookie redis
      * @param response response
      * @return views
      */
@@ -146,12 +168,23 @@ public class SiteController implements CommunityRegisterStatus {
     public String loginSystem(
             String username ,
             String password ,
-            String code , boolean rememberme,
+            String code ,
+            boolean rememberme,
             Model model ,
-            HttpSession session ,
+           /* HttpSession session ,*/
+            @CookieValue("kaptchaOwner")String kaptchaOwner,
             HttpServletResponse response){
 
-        val kaptcha = (String)session.getAttribute("kaptcha");
+        // session
+        //val kaptcha = (String)session.getAttribute("kaptcha");
+
+        String kaptcha = null;
+        // redis 获得验证码
+        if (StringUtils.isNoneBlank(kaptchaOwner)){
+            val kaptchaKey = GenRedisKeyUtil.getKaptchaKey(kaptchaOwner);
+            kaptcha = (String) redisTemplate.opsForValue().get(kaptchaKey);
+        }
+
         if (StringUtils.isBlank(kaptcha)
                 || StringUtils.isBlank(code)
                 || !kaptcha.equalsIgnoreCase(code)){
@@ -193,7 +226,9 @@ public class SiteController implements CommunityRegisterStatus {
      * @return views
      */
     @GetMapping("/logout")
-    public String logout(@CookieValue("ticket")String ticket){
+    public String logout(HttpServletRequest request , @CookieValue("ticket")String ticket){
+        // 删除 cookie
+        CookieUtil.removeValue(request, ticket);
         userService.logout(ticket);
         return "redirect:/site/login";
     }

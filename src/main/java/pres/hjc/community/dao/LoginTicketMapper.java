@@ -11,6 +11,7 @@ import pres.hjc.community.entity.LoginTicketPO;
  * @description : 登录 凭证 // 类似 jwt
  */
 @Mapper
+@Deprecated
 public interface LoginTicketMapper {
 
     /**
