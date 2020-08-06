@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import pres.hjc.community.annotation.AuthRequired;
 import pres.hjc.community.entity.UserPO;
+import pres.hjc.community.service.LikeService;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
@@ -43,6 +44,10 @@ public class UserController {
     @Autowired
     private HostHolder hostHolder;
 
+    @Autowired
+    private LikeService likeService;
+
+
     @Value("${community.path.upload}")
     private String uploadPath;
 
@@ -69,8 +74,18 @@ public class UserController {
      * 个人主页
      * @return
      */
-    @GetMapping("/profile")
-    public String profileViews(){
+    @GetMapping("/profile/{userId}")
+    public String profileViews(@PathVariable int userId , Model model ){
+
+        UserPO userPO = userService.selectById(userId);
+        if (userPO == null){
+            throw new RuntimeException("用户不存在");
+        }
+
+        model.addAttribute("user" , userPO);
+        int likeCount = likeService.findUserLikeCount(userId);
+        model.addAttribute("likeCount" , likeCount);
+
         return "site/profile";
     }
 
