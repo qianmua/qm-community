@@ -18,7 +18,16 @@ public class GenRedisKeyUtil {
      * 点赞 喜欢
      */
     public static final String PREFIX_ENTITY_LIKE = "like:entity";
+    public static final String PREFIX_USER_LIKE = "like:user";
 
+    /**
+     * 用户的点赞
+     * @param userId userId
+     * @return key
+     */
+    public static String getUserLikeKey(int userId){
+        return PREFIX_USER_LIKE + SPLIT + userId;
+    }
 
     /**
      * 有关 谁 的 赞

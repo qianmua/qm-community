@@ -3,7 +3,14 @@ $(function(){
     $("#wonderfulBtn").click(setWonderful);
     $("#deleteBtn").click(setDelete);
 });
-// 点赞
+/**
+ * 点赞
+ * @param btn
+ * @param entityType 回复 文章
+ * @param entityId id
+ * @param entityUserId user
+ * @param postId 帖子id
+ */
 function like(btn, entityType, entityId, entityUserId, postId) {
     $.post(
         /*CONTEXT_PATH +*/

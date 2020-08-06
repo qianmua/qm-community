@@ -34,14 +34,21 @@ public class LikeController {
     private HostHolder hostHolder;
 
 
-
+    /**
+     * 点赞 处理
+     * @param entityType entityType
+     * @param entityId entityId
+     * @param entityUserId entityUserId
+     * @param postId postId
+     * @return json (status)
+     */
     @PostMapping("/like")
 //    @AuthRequired
     public String like(int entityType , int entityId , int entityUserId , int postId){
 
         val usersPO = hostHolder.getUsersPO();
 
-        likeService.like(usersPO.getId() , entityType , entityId ,0);
+        likeService.like(usersPO.getId() , entityType , entityId ,entityUserId);
 
         long likeCount = likeService.findEntityLikeCount(entityType, entityId);
 

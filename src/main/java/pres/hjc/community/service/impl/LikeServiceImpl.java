@@ -1,7 +1,10 @@
 package pres.hjc.community.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Service;
 import pres.hjc.community.service.LikeService;
 import pres.hjc.community.tools.GenRedisKeyUtil;
@@ -22,6 +25,8 @@ public class LikeServiceImpl implements LikeService {
 
     /**
      * 点赞功能
+     * 用户 点赞
+     * 两次 更新
      * @param userId userId
      * @param entityType entityType
      * @param  entityId entityId
@@ -29,21 +34,34 @@ public class LikeServiceImpl implements LikeService {
      */
     @Override
     public void like(int userId, int entityType, int entityId, int entityUserId) {
-        String entityLikeKey = GenRedisKeyUtil.getEntityLikeKey(entityType , entityId);
-        // 点赞
-        // 第一次 +1
 
-        // 第二次 取消
-        // 是否在 set 集合？
-        Boolean member = redisTemplate.opsForSet().isMember(entityLikeKey, userId);
+        // redis 事务
+        redisTemplate.execute(new SessionCallback() {
+            @Override
+            public Object execute(RedisOperations operations) throws DataAccessException {
+                String entityLikeKey = GenRedisKeyUtil.getEntityLikeKey(entityType , entityId);
+                // user Id
+                String userLikeKey = GenRedisKeyUtil.getUserLikeKey(entityUserId);
+                // 是否 点过赞？
+                boolean member = operations.opsForSet().isMember(entityLikeKey, userId);
 
-        if (member != null && member){
-            // 取消点赞
-            redisTemplate.opsForSet().remove(entityLikeKey , userId);
-        }else {
-            // 点赞
-            redisTemplate.opsForSet().add(entityLikeKey , userId);
-        }
+                // 请勿 在 redis 事务中 查询
+
+                operations.multi();
+                if (member){
+                    // 取消
+                    operations.opsForSet().remove(entityLikeKey , userId);
+                    operations.opsForValue().decrement(userLikeKey);
+                }else {
+                    //赞
+                    redisTemplate.opsForSet().add(entityLikeKey , userId);
+                    operations.opsForValue().increment(userLikeKey);
+
+                }
+
+                return operations.exec();
+            }
+        });
     }
 
     public void like(int userId, int entityType, int entityId) {
@@ -87,8 +105,35 @@ public class LikeServiceImpl implements LikeService {
      */
     @Override
     public int findUserLikeCount(int userId) {
-//        String entityLikeKey = GenRedisKeyUtil.getEntityLikeKey(entityType , entityId);
+        String entityLikeKey = GenRedisKeyUtil.getUserLikeKey(  userId);
 
-        return 0;
+        Integer o = (Integer) redisTemplate.opsForValue().get(entityLikeKey);
+
+
+        return o == null ? 0 : o;
     }
 }
+
+/*
+*
+
+ //        String entityLikeKey = GenRedisKeyUtil.getEntityLikeKey(entityType , entityId);
+
+        // 点赞
+        // 第一次 +1
+
+        // 第二次 取消
+        // 是否在 set 集合？
+       Boolean member = redisTemplate.opsForSet().isMember(entityLikeKey, userId);
+
+        if (member != null && member){
+            // 取消点赞
+            redisTemplate.opsForSet().remove(entityLikeKey , userId);
+        }else {
+            // 点赞
+            redisTemplate.opsForSet().add(entityLikeKey , userId);
+        }
+
+
+        */
+
