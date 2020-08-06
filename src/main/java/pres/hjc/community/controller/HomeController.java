@@ -9,6 +9,7 @@ import pres.hjc.community.entity.DiscussPostPO;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.DiscussPostService;
 import pres.hjc.community.service.LikeService;
+import pres.hjc.community.service.MessageService;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityRegisterStatus;
 
@@ -34,8 +35,10 @@ public class HomeController implements CommunityRegisterStatus {
     private UserService userService;
 
     @Autowired
-    LikeService likeService;
+    private LikeService likeService;
 
+    @Autowired
+    private MessageService messageService;
 
     /**
      * 首页
@@ -62,6 +65,9 @@ public class HomeController implements CommunityRegisterStatus {
             hashMap.put("user" , po);
 
             long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, it.getId());
+
+            hashMap.put("allUnreadCount" , messageService.selectLetterUnreadCount(po.getId() , null));
+
             hashMap.put("likeCount" , likeCount);
 
             dis.add(hashMap);
