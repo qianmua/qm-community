@@ -185,7 +185,12 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
 
         ticketPO.setUserId(userPO.getId());
         ticketPO.setTicket(CommunityUtil.UUID());
-        ticketPO.setExpired(new Date((System.currentTimeMillis() + exSeconds * 1000)));
+        ticketPO.setExpired(new Date((System.currentTimeMillis() + exSeconds )));
+
+        System.out.println("==============");
+        System.out.println(ticketPO.getExpired().getTime());
+
+
         // 状态
         ticketPO.setStatus(0);
 

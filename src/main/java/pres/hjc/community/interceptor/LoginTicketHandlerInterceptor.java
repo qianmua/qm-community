@@ -57,7 +57,11 @@ public class LoginTicketHandlerInterceptor implements HandlerInterceptor {
         // object //ticketPO
         val ticket = userService.findLoginTicket(value);
         // 过期
-        if (ticket == null || ticket.getStatus() != 0 || !ticket.getExpired().before(new Date())){
+        System.out.println(ticket.getExpired().getTime());
+        System.out.println(System.currentTimeMillis());
+        if (ticket == null
+                || ticket.getStatus() != 0
+                || ticket.getExpired().getTime() <= System.currentTimeMillis()){
             return true;
         }
         UserPO po = userService.selectById(ticket.getUserId());
