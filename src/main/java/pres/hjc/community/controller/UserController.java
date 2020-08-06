@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import pres.hjc.community.annotation.AuthRequired;
 import pres.hjc.community.entity.UserPO;
+import pres.hjc.community.service.FollowService;
 import pres.hjc.community.service.LikeService;
 import pres.hjc.community.service.UserService;
+import pres.hjc.community.tools.CommunityRegisterStatus;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
 
@@ -36,7 +38,7 @@ import java.io.OutputStream;
 @Controller
 @RequestMapping("/user")
 @Slf4j
-public class UserController {
+public class UserController implements CommunityRegisterStatus {
 
     @Autowired
     UserService userService;
@@ -47,6 +49,8 @@ public class UserController {
     @Autowired
     private LikeService likeService;
 
+    @Autowired
+    private FollowService followService;
 
     @Value("${community.path.upload}")
     private String uploadPath;
@@ -85,6 +89,16 @@ public class UserController {
         model.addAttribute("user" , userPO);
         int likeCount = likeService.findUserLikeCount(userId);
         model.addAttribute("likeCount" , likeCount);
+
+        //关注数
+        model.addAttribute("followeeCount" , followService.findFolloweeCount(userId , ENTITY_TYPE_USER));
+        // 粉丝数
+        model.addAttribute("followerCount" , followService.findFollowerCount(ENTITY_TYPE_USER ,userId));
+        //关注？
+
+        model.addAttribute("hasFollowed" ,
+                hostHolder.getUsersPO() != null
+                        && followService.hasFollowed(hostHolder.getUsersPO().getId(), ENTITY_TYPE_USER, userId));
 
         return "site/profile";
     }
