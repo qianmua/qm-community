@@ -35,7 +35,7 @@
 							</li>
                             <!--消费 消息-->
 							<li class="nav-item ml-3 btn-group-vertical" th:if="${loginUser ne null}">
-								<a class="nav-link position-relative" th:href="@{/message/letter/list}">消息<span class="badge badge-danger">12</span></a>
+<!--								<a class="nav-link position-relative" th:href="@{/message/letter/list}">消息<span class="badge badge-danger" th:text="${allUnreadCount!=0?allUnreadCount:''}">0</span></a>-->
 							</li>
 
                             <!--注册-->
