@@ -1,6 +1,7 @@
 package pres.hjc.community.service.impl;
 
 import lombok.val;
+import lombok.var;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author HJC
@@ -62,7 +64,12 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
      */
     @Override
     public UserPO selectById(int id) {
-        return userMapper.selectById(id);
+        var cache = getCache(id);
+        if (cache == null){
+            cache = initCache(id);
+        }
+//        return userMapper.selectById(id);
+        return cache;
     }
 
 
@@ -134,6 +141,9 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
         // 成功
         if (userPO.getActivationCode().equals(code)){
             userMapper.updateStatus(userId , 1);
+
+            // 清理原始缓存
+            clearCache(userId);
             return ACTIVACTION_SUCCESS;
         }
         // 激活失败
@@ -223,7 +233,6 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
         // 1 loginout
         ticketPO.setStatus(1);
         redisTemplate.opsForValue().set(key , ticketPO);
-
     }
 
     /**
@@ -248,7 +257,11 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
      */
     @Override
     public int uploadHeader(int userId , String headerUrl){
+//        int i = userMapper.updateHeader(userId, headerUrl);
+//         清理原始缓存
+//        clearCache(userId);
         return userMapper.updateHeader(userId, headerUrl);
+//        return i;
     }
 
     @Override
@@ -263,6 +276,41 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
 
     @Override
     public int updateHeader(int id, String headerUrl) {
-        return userMapper.updateHeader(id, headerUrl);
+        int i = userMapper.updateHeader(id, headerUrl);
+        //         清理原始缓存
+        clearCache(id);
+        return i;
+    }
+
+
+    /**
+     * 从redis 中 取得 缓存 的 user
+     * @param userId userId
+     * @return user
+     */
+    private UserPO getCache(int userId){
+        String  key = GenRedisKeyUtil.getUserKey(userId);
+        return (UserPO) redisTemplate.opsForValue().get(key);
+    }
+
+    /**
+     * 给redis 缓存 user
+     * @param userId userId
+     * @return user
+     */
+    private UserPO initCache(int userId){
+        val userPO = userMapper.selectById(userId);
+        String  key = GenRedisKeyUtil.getUserKey(userId);
+        redisTemplate.opsForValue().set(key , userPO ,3600 * 3 , TimeUnit.SECONDS);
+        return userPO;
+    }
+
+    /**
+     * 清除 缓存用户信息
+     * @param userId userId
+     */
+    private void clearCache(int userId){
+        String  key = GenRedisKeyUtil.getUserKey(userId);
+        redisTemplate.delete(key);
     }
 }

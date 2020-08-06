@@ -42,6 +42,14 @@ public class GenRedisKeyUtil {
      * 凭证
      */
     private static final String PREFIX_TICKET = "ticket";
+    /**
+     * 用户信息
+     */
+    private static final String PREFIX_USER = "user";
+
+    public static String getUserKey(int userId){
+        return PREFIX_USER + SPLIT + userId;
+    }
 
     /**
      * 登录凭证
