@@ -14,6 +14,7 @@ import pres.hjc.community.dao.UserMapper;
 import pres.hjc.community.tools.MailClientUtil;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * @author HJC
@@ -49,7 +50,7 @@ public class UnitTest {
     @Test
     public void genTemp(){
         Context context = new Context();
-
+        Scanner scanner = new Scanner(System.in);
         context.setVariable("username" , "qianmu");
         context.setVariable("message" , "guguguugugu");
         String process = templateEngine.process("/mail/demoTemplate", context);
