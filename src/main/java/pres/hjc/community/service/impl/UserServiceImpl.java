@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
      */
     @Override
     public UserPO selectById(int id) {
+
         var cache = getCache(id);
         if (cache == null){
             cache = initCache(id);

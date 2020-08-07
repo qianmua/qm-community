@@ -45,6 +45,16 @@ spring:
       # 123456
     password:
 
+  # kafka
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: community-consumer-group
+      # 自动提交 消费者偏移量
+      enable-auto-commit: true
+      # 3s 自动提交
+      auto-commit-interval: 3000
+
 # mybatis config
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -59,6 +69,7 @@ community:
     path:
       domain: http://localhost:9090
       upload: G:\Java_Test\img\img2
+
 
 
 
