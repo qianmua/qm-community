@@ -19,23 +19,23 @@ import pres.hjc.community.CommunityBootstrapApplication;
  * @date 2020/8/7  13:45
  * @description :
  */
-@RunWith(Runner.class)
-@SpringBootTest
-@ContextConfiguration(classes = CommunityBootstrapApplication.class)
+//@RunWith(Runner.class)
+//@SpringBootTest
+//@ContextConfiguration(classes = CommunityBootstrapApplication.class)
 public class Testkafka {
 
 //    @Autowired
 //    private KafkaProvider kafkaProvider;
 
-    @Test
+//    @Test
     public void testkafka(){
 
     }
 }
 
-@Component
+//@Component
 class KafkaProvider{
-    @Autowired
+//    @Autowired
     private KafkaTemplate kafkaTemplate;
 
     public void sendMessage(String topic , String content){
@@ -44,7 +44,7 @@ class KafkaProvider{
 }
 
 class KafkaComsumer{
-    @KafkaListener( topics = "test")
+//    @KafkaListener( topics = "test")
     public void kafkaCons(ConsumerRecord consumerRecord){
         System.out.println(consumerRecord.value());
     }

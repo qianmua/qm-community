@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import pres.hjc.community.CommunityBootstrapApplication;
-import pres.hjc.community.dao.LoginTicketMapper;
+//import pres.hjc.community.dao.LoginTicketMapper;
 import pres.hjc.community.entity.LoginTicketPO;
 
 import java.util.Date;
@@ -27,7 +27,7 @@ public class MapperTest {
 
 
     @Autowired
-    private LoginTicketMapper loginTicketMapper;
+//    private LoginTicketMapper loginTicketMapper;
 
     @Test
     public void testAdd(){
@@ -39,7 +39,7 @@ public class MapperTest {
         po.setStatus(0);
         po.setExpired(new Date(System.currentTimeMillis() + 1000 * 60 * 24 * 24));
 
-        val i = loginTicketMapper.insertLoginTicket(po);
+//        val i = loginTicketMapper.insertLoginTicket(po);
 
 
     }
@@ -47,8 +47,8 @@ public class MapperTest {
 
     @Test
     public void queryTic(){
-        val qianmuna = loginTicketMapper.selectByTicket("qianmuna");
+//        val qianmuna = loginTicketMapper.selectByTicket("qianmuna");
         // success
-        System.out.println(qianmuna);
+//        System.out.println(qianmuna);
     }
 }

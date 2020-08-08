@@ -47,6 +47,10 @@ spring:
 
   # kafka
   kafka:
+    listener:
+      # 监听 主题不存在 忽略
+      # true 不存在 报错
+      missing-topics-fatal: false
     bootstrap-servers: localhost:9092
     consumer:
       group-id: community-consumer-group

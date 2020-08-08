@@ -3,6 +3,7 @@ package pres.hjc.community.event;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -67,7 +68,7 @@ public class EventConsumer implements ObjectCommunityConstant {
         // 推送消息
         messagePO.setContent(JSONObject.toJSONString(content));
 
-        messageService.insertMessage( messagePO);
+//        messageService.insertMessage( messagePO);
     }
 
 
