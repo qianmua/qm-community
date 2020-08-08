@@ -72,13 +72,19 @@ public class CommentController implements ObjectCommunityConstant , CommunityReg
                 .setEntityType(commentPO.getEntityType())
                 .setData("postId" , disId);
 
+        // 通知类型
         if (commentPO.getEntityType() == ENTITY_TYPE_POST){
             val discussPostPO = discussPostService.selectDiscussPostById(commentPO.getEntityId());
-            // 通知给 -》
+            // 通知给 -》用户
             eventVO.setEntityUserId(discussPostPO.getUserId());
-        }else if (commentPO.getEntityType() == ENTITY_TYPE_USER){
-
+        }else if (commentPO.getEntityType() == ENTITY_TYPE_COMMENT){
+            // 评论
+            val commentPO1 = commentService.selectCommentById(commentPO.getEntityId());
+            eventVO.setEntityUserId(commentPO1.getUserId());
         }
+
+        // 消息 发布
+        eventProducer.fireEvent(eventVO);
 
         return "redirect:/discuss/detail/" + disId ;
     }

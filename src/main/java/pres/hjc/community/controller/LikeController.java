@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pres.hjc.community.annotation.AuthRequired;
+import pres.hjc.community.event.EventProducer;
 import pres.hjc.community.service.LikeService;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
+import pres.hjc.community.tools.ObjectCommunityConstant;
+import pres.hjc.community.vo.EventVO;
 
 import java.util.HashMap;
 
@@ -25,13 +28,16 @@ import java.util.HashMap;
 //@Controller
 //@RequestMapping("/like")
 
-public class LikeController {
+public class LikeController implements ObjectCommunityConstant {
 
     @Autowired
     private LikeService likeService;
 
     @Autowired
     private HostHolder hostHolder;
+
+    @Autowired
+    private EventProducer eventProducer;
 
 
     /**
@@ -58,6 +64,19 @@ public class LikeController {
         HashMap<String, Object> map = new HashMap<>(2);
         map.put("likeCount" , likeCount);
         map.put("likeStatus" , likeStatus);
+
+        // 系统事件 消费
+        if (likeStatus == 1){
+            val eventVO = new EventVO()
+                    .setTopic(TOPIC_LIKE)
+                    .setUserId(hostHolder.getUsersPO().getId())
+                    .setEntityType(entityType)
+                    .setEntityId(entityId)
+                    .setEntityUserId(entityUserId)
+                    .setData("postId" , postId);
+
+            eventProducer.fireEvent(eventVO);
+        }
 
         return CommunityUtil.getJSONString(200 , null , map);
     }

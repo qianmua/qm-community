@@ -34,11 +34,11 @@ public class ServiceLogAspect {
 
         // spring 得到 request 对象
         ServletRequestAttributes  attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-
-        assert attributes != null;
-        HttpServletRequest request = attributes.getRequest();
-
-        String ip = request.getRemoteAddr();
+        String ip = "";
+        if (attributes != null){
+            HttpServletRequest request = attributes.getRequest();
+            ip = request.getRemoteAddr();
+        }
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         //请求 的 类名 + 方法名
         String postName = joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();

@@ -77,6 +77,19 @@ public interface MessageMapper {
      */
     int updateStatus( @Param("ids")List<Integer> ids,  @Param("status")int status);
 
+
+
+
+
+    /*
+    *
+    *
+    *  系统 消息 通知
+    *
+    *
+    * */
+
+
     /**
      * 查询某个主题下最新的通知
      * @param userId

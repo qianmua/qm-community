@@ -1,10 +1,13 @@
 package pres.hjc.community.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.val;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 import pres.hjc.community.dto.PageDTO;
 import pres.hjc.community.entity.MessagePO;
 import pres.hjc.community.entity.UserPO;
@@ -12,6 +15,7 @@ import pres.hjc.community.service.MessageService;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
+import pres.hjc.community.tools.ObjectCommunityConstant;
 
 import java.util.*;
 
@@ -24,7 +28,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/message")
-public class MessageController {
+public class MessageController implements ObjectCommunityConstant {
 
     @Autowired
     private MessageService messageService;
@@ -86,6 +90,9 @@ public class MessageController {
         // 未读消息 总数
         val unreadCount = messageService.selectLetterUnreadCount(po.getId(), null);
         model.addAttribute("letterUnreadCount" , unreadCount);
+        // 未读 通知
+        model.addAttribute("noticeUnreadCount",messageService.selectNoticeUnreadCount(po.getId() , null));
+
         model.addAttribute("conversations" , cov);
 
         return "site/letter";
@@ -203,6 +210,64 @@ public class MessageController {
         messageService.insertMessage(messagePO);
 
         return CommunityUtil.getJSONString(0);
+    }
+
+
+    /**
+     * 通知列表
+     * @param model model
+     * @return views
+     */
+    @GetMapping("/notice/list")
+    public String getNoticeList(Model model){
+        val usersPO = hostHolder.getUsersPO();
+        // 通知 类型
+
+        HashMap<String, Object> msgVo;
+        //评论
+        var messagePO = messageService.selectLatestNotice(usersPO.getId(), TOPIC_COMMENT);
+        msgVo = getMsgEntity(usersPO.getId(), TOPIC_COMMENT , messagePO);
+        model.addAttribute("commentNotice" , msgVo);
+        //点赞
+        messagePO = messageService.selectLatestNotice(usersPO.getId() , TOPIC_LIKE);
+        msgVo = getMsgEntity(usersPO.getId(), TOPIC_LIKE , messagePO);
+        model.addAttribute("likeNotice" , msgVo);
+
+        ///关注
+        messagePO = messageService.selectLatestNotice(usersPO.getId() , TOPIC_FOLLOW);
+        msgVo = getMsgEntity(usersPO.getId(), TOPIC_FOLLOW , messagePO);
+        model.addAttribute("followNotice" , msgVo);
+
+
+        // 未读 消息总数
+        model.addAttribute("letterUnreadCount" , messageService.selectLetterUnreadCount(usersPO.getId() , null));
+        //未读 通知 总数
+        model.addAttribute("noticeUnreadCount",messageService.selectNoticeUnreadCount(usersPO.getId() , null));
+
+        return "site/notice";
+
+    }
+
+    private HashMap<String, Object> getMsgEntity(int userId, String type, MessagePO messagePO) {
+        HashMap<String, Object> msgVo = new HashMap<>(8);
+        if (messagePO != null){
+            msgVo.put("message" , messagePO);
+            // 转义
+            // 正义
+            val s = HtmlUtils.htmlUnescape(messagePO.getContent());
+            HashMap hashMap = JSONObject.parseObject(s, HashMap.class);
+            msgVo.put("user" , userService.selectById( (Integer)hashMap.get("userId") ));
+            msgVo.put("entityType" , hashMap.get("entityType"));
+            msgVo.put("entityId" , hashMap.get("entityId"));
+            msgVo.put("postId" , hashMap.get("postId"));
+            // 消息数量
+            msgVo.put("count" ,messageService.selectNoticeCount(userId , type));
+
+            // 未读 数量
+            msgVo.put("unread" , messageService.selectNoticeUnreadCount(userId , type));
+
+        }
+        return msgVo;
     }
 
 

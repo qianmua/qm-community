@@ -91,4 +91,5 @@ public class CommentServiceImpl implements CommentService , CommunityRegisterSta
     public List<CommentPO> selectCommentsByEntity(int entityType, int entityId, int offset, int limit) {
         return commentMapper.selectCommentsByEntity(entityType, entityId, offset, limit);
     }
+
 }

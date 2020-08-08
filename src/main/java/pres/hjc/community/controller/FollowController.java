@@ -15,6 +15,7 @@ import pres.hjc.community.tools.CommunityRegisterStatus;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
 import pres.hjc.community.tools.ObjectCommunityConstant;
+import pres.hjc.community.vo.EventVO;
 
 import java.util.Map;
 
@@ -49,6 +50,16 @@ public class FollowController implements CommunityRegisterStatus, ObjectCommunit
         val usersPO = hostHolder.getUsersPO();
 
         followService.follow(usersPO.getId() , entityType , entityId);
+
+        /// 关注 事件消费
+        val eventVO = new EventVO()
+                .setTopic(TOPIC_FOLLOW)
+                .setUserId(hostHolder.getUsersPO().getId())
+                .setEntityType(entityType)
+                .setEntityId(entityId)
+                .setEntityUserId(entityId);
+
+        eventProducer.fireEvent(eventVO);
 
         return CommunityUtil.getJSONString(200 , "关注啦~");
     }
