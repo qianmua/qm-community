@@ -227,17 +227,16 @@ public class MessageController implements ObjectCommunityConstant {
         //评论
         var messagePO = messageService.selectLatestNotice(usersPO.getId(), TOPIC_COMMENT);
         msgVo = getMsgEntity(usersPO.getId(), TOPIC_COMMENT , messagePO);
-        model.addAttribute("commentNotice" , msgVo);
+        model.addAttribute("commentNotice" , msgVo.isEmpty() ? null : msgVo);
         //点赞
         messagePO = messageService.selectLatestNotice(usersPO.getId() , TOPIC_LIKE);
         msgVo = getMsgEntity(usersPO.getId(), TOPIC_LIKE , messagePO);
-        model.addAttribute("likeNotice" , msgVo);
+        model.addAttribute("likeNotice" , msgVo.isEmpty() ? null : msgVo);
 
         ///关注
         messagePO = messageService.selectLatestNotice(usersPO.getId() , TOPIC_FOLLOW);
         msgVo = getMsgEntity(usersPO.getId(), TOPIC_FOLLOW , messagePO);
-        model.addAttribute("followNotice" , msgVo);
-
+        model.addAttribute("followNotice" , msgVo.isEmpty() ? null : msgVo);
 
         // 未读 消息总数
         model.addAttribute("letterUnreadCount" , messageService.selectLetterUnreadCount(usersPO.getId() , null));
