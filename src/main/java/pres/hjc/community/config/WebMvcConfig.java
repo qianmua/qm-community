@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import pres.hjc.community.interceptor.AuthRequiredHandlerInterceptor;
 import pres.hjc.community.interceptor.BaseHandlerInterceptor;
 import pres.hjc.community.interceptor.LoginTicketHandlerInterceptor;
+import pres.hjc.community.interceptor.MessageInterceptor;
 
 /**
  * @author HJC
@@ -25,6 +26,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
     private AuthRequiredHandlerInterceptor authRequiredHandlerInterceptor;
+    @Autowired
+    private MessageInterceptor messageInterceptor;
 
     /**
      * 注册拦截器
@@ -41,6 +44,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 
         registry.addInterceptor(authRequiredHandlerInterceptor)
+                .excludePathPatterns("/**/*.css" , "/**/*.js" , "/img/**");
+
+        registry.addInterceptor(messageInterceptor)
                 .excludePathPatterns("/**/*.css" , "/**/*.js" , "/img/**");
     }
 }

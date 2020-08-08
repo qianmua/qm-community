@@ -66,7 +66,7 @@ public class HomeController implements CommunityRegisterStatus {
 
             long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, it.getId());
 
-            hashMap.put("allUnreadCount" , messageService.selectLetterUnreadCount(po.getId() , null));
+//            hashMap.put("allUnreadCount" , messageService.selectLetterUnreadCount(po.getId() , null));
 
             hashMap.put("likeCount" , likeCount);
 
