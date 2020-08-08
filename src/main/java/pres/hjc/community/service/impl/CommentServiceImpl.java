@@ -73,7 +73,7 @@ public class CommentServiceImpl implements CommentService , CommunityRegisterSta
         if (comment.getEntityType() == ENTITY_TYPE_POST){
             // 查询到 贴子数量
             val count = commentMapper.selectCountByEntity(comment.getEntityType(), comment.getEntityId());
-            // 更新 帖子梳数量
+            // 更新 帖子数量
             discussPostService.updateCommentCount(comment.getEntityId() , count);
         }
 

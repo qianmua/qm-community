@@ -140,21 +140,6 @@ public class MessageController implements ObjectCommunityConstant {
         return "site/letter-detail";
     }
 
-    /**
-     * 消费私信
-     * @param letterList letterList
-     * @return
-     */
-    private List<Integer> getLetterIds(List<MessagePO> letterList){
-        val list = new ArrayList<Integer>();
-        letterList.forEach(v1 -> {
-            // 未消费列表
-            if (hostHolder.getUsersPO().getId() == v1.getToId() && v1.getStatus() == 0){
-                list.add(v1.getId());
-            }
-        });
-        return list;
-    }
 
 
     /**
@@ -267,6 +252,69 @@ public class MessageController implements ObjectCommunityConstant {
 
         }
         return msgVo;
+    }
+
+    /**
+     * 通知 详情 页面
+     * @param topic topic [comment , like , follow]
+     * @param pageDTO pageDTO
+     * @param model model
+     * @return views
+     */
+    @GetMapping("/notice/detail/{topic}")
+    public String getNoticeDetail(@PathVariable String topic ,PageDTO pageDTO ,Model model){
+        val usersPO = hostHolder.getUsersPO();
+
+        pageDTO.setLimit(10);
+        pageDTO.setPath("/message/notice/detail/" + topic);
+        pageDTO.setRows(messageService.selectNoticeCount(usersPO.getId() , topic));
+        val pos = messageService.selectNotices(usersPO.getId(), topic, pageDTO.getOffset(), pageDTO.getLimit());
+        val noticeVOList = new ArrayList<Map<String, Object>>();
+        pos.forEach(v1 -> {
+            val vo = new HashMap<String , Object>(8);
+
+            val htmlUnescape = HtmlUtils.htmlUnescape(v1.getContent());
+            val hashMap = JSONObject.parseObject(htmlUnescape, HashMap.class);
+
+            vo.put("notice" , v1);
+            vo.put("user" , userService.selectById( (Integer) hashMap.get("userId") ));
+            vo.put("entityType" , hashMap.get("entityType") );
+            vo.put("entityId" , hashMap.get("entityId") );
+            vo.put("postId" , hashMap.get("postId") );
+            // 通知发起者
+            vo.put("fromUser" , userService.selectById( v1.getFromId()) );
+
+            noticeVOList.add(vo);
+
+        });
+
+        model.addAttribute("notices" , noticeVOList);
+
+        // 已读
+        val letterIds = getLetterIds(pos);
+        if (!letterIds.isEmpty()){
+            messageService.updateStatus(letterIds);
+        }
+
+        return "site/notice-detail";
+
+    }
+
+
+    /**
+     * 消费私信
+     * @param letterList letterList
+     * @return
+     */
+    private List<Integer> getLetterIds(List<MessagePO> letterList){
+        val list = new ArrayList<Integer>();
+        letterList.forEach(v1 -> {
+            // 未消费列表
+            if (hostHolder.getUsersPO().getId() == v1.getToId() && v1.getStatus() == 0){
+                list.add(v1.getId());
+            }
+        });
+        return list;
     }
 
 
