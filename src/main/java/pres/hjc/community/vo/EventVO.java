@@ -1,6 +1,10 @@
 package pres.hjc.community.vo;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,13 +17,21 @@ import java.util.Map;
  * @description :
  */
 @Data
+@Accessors( chain = true)
 public class EventVO {
     private String topic;
     private Integer userId;
     private Integer entityType;
     private Integer entityId;
     private Integer entityUserId;
+
+//    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private Map<String,Object> data = new HashMap<>();
 
 
+    public EventVO setData(String key , Object value) {
+        this.data.put(key , value);
+        return this;
+    }
 }

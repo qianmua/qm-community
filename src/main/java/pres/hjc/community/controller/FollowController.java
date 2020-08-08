@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import pres.hjc.community.annotation.AuthRequired;
 import pres.hjc.community.dto.PageDTO;
 import pres.hjc.community.entity.UserPO;
+import pres.hjc.community.event.EventProducer;
 import pres.hjc.community.service.FollowService;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityRegisterStatus;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
+import pres.hjc.community.tools.ObjectCommunityConstant;
 
 import java.util.Map;
 
@@ -25,7 +27,7 @@ import java.util.Map;
  */
 //@RestController
 @Controller
-public class FollowController implements CommunityRegisterStatus {
+public class FollowController implements CommunityRegisterStatus, ObjectCommunityConstant {
 
     @Autowired
     private FollowService followService;
@@ -35,6 +37,9 @@ public class FollowController implements CommunityRegisterStatus {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EventProducer eventProducer;
 
     @PostMapping("/follow")
 //    @AuthRequired

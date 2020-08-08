@@ -14,7 +14,7 @@ import pres.hjc.community.vo.EventVO;
  * @description : 消息 生产者
  */
 @Component
-public class Eventproducer {
+public class EventProducer {
 
     @Autowired
     private KafkaTemplate kafkaTemplate;

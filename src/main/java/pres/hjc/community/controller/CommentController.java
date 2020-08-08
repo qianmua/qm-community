@@ -1,5 +1,6 @@
 package pres.hjc.community.controller;
 
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,8 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pres.hjc.community.annotation.AuthRequired;
 import pres.hjc.community.entity.CommentPO;
+import pres.hjc.community.event.EventProducer;
 import pres.hjc.community.service.CommentService;
+import pres.hjc.community.service.DiscussPostService;
+import pres.hjc.community.tools.CommunityRegisterStatus;
 import pres.hjc.community.tools.HostHolder;
+import pres.hjc.community.tools.ObjectCommunityConstant;
+import pres.hjc.community.vo.EventVO;
 
 import java.util.Date;
 
@@ -23,13 +29,20 @@ import java.util.Date;
  */
 @Controller
 @RequestMapping("/comment")
-public class CommentController {
+public class CommentController implements ObjectCommunityConstant , CommunityRegisterStatus {
 
     @Autowired
     private CommentService commentService;
 
     @Autowired
     private HostHolder hostHolder;
+
+    @Autowired
+    private EventProducer eventProducer;
+
+
+    @Autowired
+    private DiscussPostService discussPostService;
 
 
     /**
@@ -49,6 +62,23 @@ public class CommentController {
         commentPO.setStatus(0);
         commentPO.setCreateTime(new Date());
         commentService.insertComment(commentPO);
+
+        // 评论事件
+        // 通知消费
+        val eventVO = new EventVO()
+                .setTopic(TOPIC_COMMENT)
+                .setUserId(hostHolder.getUsersPO().getId())
+                .setEntityId(commentPO.getEntityId())
+                .setEntityType(commentPO.getEntityType())
+                .setData("postId" , disId);
+
+        if (commentPO.getEntityType() == ENTITY_TYPE_POST){
+            val discussPostPO = discussPostService.selectDiscussPostById(commentPO.getEntityId());
+            // 通知给 -》
+            eventVO.setEntityUserId(discussPostPO.getUserId());
+        }else if (commentPO.getEntityType() == ENTITY_TYPE_USER){
+
+        }
 
         return "redirect:/discuss/detail/" + disId ;
     }
