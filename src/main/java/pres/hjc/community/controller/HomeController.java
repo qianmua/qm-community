@@ -89,5 +89,8 @@ public class HomeController implements CommunityRegisterStatus {
         return "error/500";
     }
 
+    @GetMapping("/denied")
+    public String err404() { return "error/404"; }
+
 
 }

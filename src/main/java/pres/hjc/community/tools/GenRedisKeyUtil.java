@@ -47,6 +47,69 @@ public class GenRedisKeyUtil {
      */
     private static final String PREFIX_USER = "user";
 
+    /**
+     * 独立访客
+     * ip
+     * hyperLogLog
+     */
+    private static final String PREFIX_UV = "uv";
+
+    /**
+     * 日活跃用户
+     * userId
+     * bitMap
+     */
+    private static final String PREFIX_DAU = "dau";
+
+
+    /*
+    ***************************************
+    ***************************************
+    *               key
+    ***************************************
+    ***************************************
+    * */
+
+    /**
+     * 单日 UV
+     * @param date
+     * @return
+     */
+    public static String getUVKey(String date){
+        return PREFIX_UV + SPLIT + date;
+    }
+
+    /**
+     * 日期区间：
+     * @param sDate
+     * @param lDate
+     * @return
+     */
+    public static String getUVKey(String sDate , String lDate){
+        return PREFIX_UV +SPLIT + sDate + SPLIT + lDate;
+    }
+
+    /**
+     * 单日 日活跃
+     * @param date
+     * @return
+     */
+    public static String getDAUKey(String date){
+        return PREFIX_DAU + SPLIT + date;
+    }
+
+    /**
+     * 指定日期 活跃
+     * @param sDate
+     * @param lDate
+     * @return
+     */
+    public static String getDAUKey(String sDate , String lDate){
+        return PREFIX_DAU + SPLIT + sDate + SPLIT + lDate;
+    }
+
+
+
     public static String getUserKey(int userId){
         return PREFIX_USER + SPLIT + userId;
     }

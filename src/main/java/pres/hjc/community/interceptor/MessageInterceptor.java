@@ -29,10 +29,12 @@ public class MessageInterceptor implements HandlerInterceptor {
 
     /**
      * 消息 未读 提前消费
-     * @param request
-     * @param response
-     * @param handler
-     * @param modelAndView
+     * 触发 事件
+     * 渲染时
+     * @param request request
+     * @param response response
+     * @param handler handler
+     * @param modelAndView modelAndView
      * @throws Exception
      */
     @Override
