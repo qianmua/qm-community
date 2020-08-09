@@ -5,6 +5,14 @@ $(function(){
 function publish() {
     $("#publishModal").modal("hide");
 
+    /// get csrf token
+    let token = $("meta[name='csrf']").attr('content');
+    let header = $("meta[name='csrf_header']").attr('content');
+
+    $(document).ajaxSend( (e , xhr , options) => {
+        xhr.setRequestHeader(header , token)
+    });
+
     // 获取标题和内容
     var title = $("#recipient-name").val();
     var content = $("#message-text").val();

@@ -133,10 +133,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements C
                 ;
 
 
+        // 默认 拦截 logout url
+        // 覆盖默认逻辑
+        // 定制
         http.logout()
                 .logoutUrl("/site/logout")
                 // logoutSuccessHandler
-                .logoutSuccessHandler(null)
+//                .logoutSuccessHandler(null)
                 ;
 
 
@@ -152,13 +155,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements C
                 AUTHORITY_MODERATOR,
                 AUTHORITY_ROOT
         ).anyRequest().permitAll()
+        .and()
+
+        .csrf().disable()
+        ;
 
                 /*.antMatchers("/letter").hasAnyAuthority("ROOT" , "ADMIN")
                 .antMatchers("/admin").hasAnyAuthority("ROOT" , "ADMIN")
                 */
-                .and()
                 // 无权限？
-                .exceptionHandling()
+        http.exceptionHandling()
                 // 未登录
                 .authenticationEntryPoint((request, response, authException) -> {
                     // ajax or http?

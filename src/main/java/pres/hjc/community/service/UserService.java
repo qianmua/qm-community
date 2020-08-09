@@ -1,8 +1,10 @@
 package pres.hjc.community.service;
 
+import org.springframework.security.core.GrantedAuthority;
 import pres.hjc.community.entity.LoginTicketPO;
 import pres.hjc.community.entity.UserPO;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -71,6 +73,13 @@ public interface UserService{
      * @return
      */
     int uploadHeader(int userId , String headerUrl);
+
+    /**
+     * 权限集
+     * @param userId userId
+     * @return auth
+     */
+    public Collection<? extends GrantedAuthority> getAuthorities(int userId);
 
 
 

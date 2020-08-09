@@ -4,6 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -68,6 +72,15 @@ public class LoginTicketHandlerInterceptor implements HandlerInterceptor {
         // 持有 用户
         // cache
         hostHolder.setUsersPO(po);
+
+        // 构建 认证 结果， 存入SecurityContext // 用域授权
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                po,
+                po.getPassword(),
+                userService.getAuthorities(po.getId()));
+        // 存入凭证
+        SecurityContextHolder.setContext(new SecurityContextImpl(authentication));
+
         return true;
 
     }
@@ -103,5 +116,6 @@ public class LoginTicketHandlerInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         hostHolder.clear();
+        SecurityContextHolder.clearContext();
     }
 }

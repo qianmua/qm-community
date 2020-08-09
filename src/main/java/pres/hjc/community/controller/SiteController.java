@@ -6,6 +6,7 @@ import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -229,6 +230,7 @@ public class SiteController implements CommunityStatusCode {
         // 删除 cookie
         CookieUtil.removeValue(request, ticket);
         userService.logout(ticket);
+        SecurityContextHolder.clearContext();
         return "redirect:/site/login";
     }
 

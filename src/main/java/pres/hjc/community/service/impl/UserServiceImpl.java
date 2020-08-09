@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,10 +23,7 @@ import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.GenRedisKeyUtil;
 import pres.hjc.community.tools.MailClientUtil;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -321,6 +319,28 @@ public class UserServiceImpl implements UserService, CommunityStatusCode, UserDe
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;
+    }
+
+    /**
+     * 查询 用户 权限集
+     * @param userId userId
+     * @return auth
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities(int userId){
+        UserPO userPO = this.selectById(userId);
+        val authorities = new ArrayList<GrantedAuthority>();
+        authorities.add((GrantedAuthority) () -> {
+           switch (userPO.getType()){
+               case 1:
+                   return AUTHORITY_ADMIN;
+               case 2:
+                   return AUTHORITY_MODERATOR;
+               default:
+                   return AUTHORITY_USER;
+           }
+        });
+        return authorities;
     }
 
 }
