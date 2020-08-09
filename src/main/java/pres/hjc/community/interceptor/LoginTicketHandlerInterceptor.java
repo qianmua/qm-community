@@ -73,6 +73,7 @@ public class LoginTicketHandlerInterceptor implements HandlerInterceptor {
         // cache
         hostHolder.setUsersPO(po);
 
+
         // 构建 认证 结果， 存入SecurityContext // 用域授权
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 po,

@@ -2,13 +2,12 @@ package pres.hjc.community.controller;
 
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pres.hjc.community.event.EventProducer;
 import pres.hjc.community.service.LikeService;
-import pres.hjc.community.tools.CommunityUtil;
-import pres.hjc.community.tools.HostHolder;
-import pres.hjc.community.tools.KafkaCommunityConstant;
+import pres.hjc.community.tools.*;
 import pres.hjc.community.vo.EventVO;
 
 import java.util.HashMap;
@@ -24,7 +23,7 @@ import java.util.HashMap;
 //@Controller
 //@RequestMapping("/like")
 
-public class LikeController implements KafkaCommunityConstant {
+public class LikeController implements KafkaCommunityConstant, CommunityStatusCode {
 
     @Autowired
     private LikeService likeService;
@@ -34,6 +33,9 @@ public class LikeController implements KafkaCommunityConstant {
 
     @Autowired
     private EventProducer eventProducer;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     /**
@@ -72,6 +74,11 @@ public class LikeController implements KafkaCommunityConstant {
                     .setData("postId" , postId);
 
             eventProducer.fireEvent(eventVO);
+        }
+
+        // 排行分
+        if (entityType == ENTITY_TYPE_POST){
+            redisTemplate.opsForSet().add(GenRedisKeyUtil.getPostScore() , postId);
         }
 
         return CommunityUtil.getJSONString(200 , null , map);

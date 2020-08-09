@@ -3,6 +3,7 @@ package pres.hjc.community.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import pres.hjc.community.interceptor.*;
 
@@ -54,4 +55,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(dataInterceptor)
                 .excludePathPatterns("/**/*.css" , "/**/*.js" , "/img/**");
     }
+
 }

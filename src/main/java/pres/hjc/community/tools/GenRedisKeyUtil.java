@@ -61,6 +61,11 @@ public class GenRedisKeyUtil {
      */
     private static final String PREFIX_DAU = "dau";
 
+    /**
+     * 帖子排行
+     */
+    private static final String PREFIX_POST_SCORE = "post";
+
 
     /*
     ***************************************
@@ -69,6 +74,14 @@ public class GenRedisKeyUtil {
     ***************************************
     ***************************************
     * */
+
+    /**
+     * 热帖 key
+     * @return key
+     */
+    public static String getPostScore(){
+        return PREFIX_POST_SCORE + SPLIT + "score";
+    }
 
     /**
      * 单日 UV

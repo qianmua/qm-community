@@ -104,7 +104,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements C
             *//**
              * 支持 的认证结果类型
              *
-             * @param authentication authentication
+             * param authentication authentication
              * @return  1 0
              *//*
             @Override
@@ -153,8 +153,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements C
                         AUTHORITY_USER ,
                 AUTHORITY_ADMIN ,
                 AUTHORITY_MODERATOR,
-                AUTHORITY_ROOT
-        ).anyRequest().permitAll()
+                AUTHORITY_ROOT)
+                .antMatchers(
+                        "/discuss/top",
+                "/discuss/wonderful").hasAnyAuthority(AUTHORITY_MODERATOR)
+                .antMatchers("/discuss/delete").hasAnyAuthority(AUTHORITY_ADMIN)
+
+                .anyRequest().permitAll()
         .and()
 
         .csrf().disable()

@@ -2,6 +2,7 @@ package pres.hjc.community.controller;
 
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,7 @@ import pres.hjc.community.service.CommentService;
 import pres.hjc.community.service.DiscussPostService;
 import pres.hjc.community.service.LikeService;
 import pres.hjc.community.service.UserService;
-import pres.hjc.community.tools.CommunityStatusCode;
-import pres.hjc.community.tools.CommunityUtil;
-import pres.hjc.community.tools.HostHolder;
-import pres.hjc.community.tools.KafkaCommunityConstant;
+import pres.hjc.community.tools.*;
 import pres.hjc.community.vo.EventVO;
 
 import java.util.*;
@@ -51,6 +49,9 @@ public class DiscussPostController implements CommunityStatusCode, KafkaCommunit
     @Autowired
     private EventProducer eventProducer;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * 发帖
      * @param title title
@@ -79,6 +80,9 @@ public class DiscussPostController implements CommunityStatusCode, KafkaCommunit
                 .setUserId(po.getId())
                 .setEntityType(ENTITY_TYPE_POST)
                 .setEntityId(po1.getId()));*/
+
+        // 排行分
+        redisTemplate.opsForSet().add(GenRedisKeyUtil.getPostScore() , po1.getId());
 
         return CommunityUtil.getJSONString(200 , "success");
     }
@@ -216,6 +220,9 @@ public class DiscussPostController implements CommunityStatusCode, KafkaCommunit
                 .setUserId(hostHolder.getUsersPO().getId())
                 .setEntityType(ENTITY_TYPE_POST)
                 .setEntityId(id));*/
+
+        // 排行分
+        redisTemplate.opsForSet().add(GenRedisKeyUtil.getPostScore() , id);
 
         return CommunityUtil.getJSONString(200);
     }

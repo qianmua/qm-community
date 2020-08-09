@@ -2,6 +2,7 @@ package pres.hjc.community.controller;
 
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import pres.hjc.community.event.EventProducer;
 import pres.hjc.community.service.CommentService;
 import pres.hjc.community.service.DiscussPostService;
 import pres.hjc.community.tools.CommunityStatusCode;
+import pres.hjc.community.tools.GenRedisKeyUtil;
 import pres.hjc.community.tools.HostHolder;
 import pres.hjc.community.tools.KafkaCommunityConstant;
 import pres.hjc.community.vo.EventVO;
@@ -38,9 +40,11 @@ public class CommentController implements KafkaCommunityConstant, CommunityStatu
     @Autowired
     private EventProducer eventProducer;
 
-
     @Autowired
     private DiscussPostService discussPostService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     /**
@@ -75,6 +79,9 @@ public class CommentController implements KafkaCommunityConstant, CommunityStatu
             val discussPostPO = discussPostService.selectDiscussPostById(commentPO.getEntityId());
             // 通知给 -》用户
             eventVO.setEntityUserId(discussPostPO.getUserId());
+            // 排行分
+            redisTemplate.opsForSet().add(GenRedisKeyUtil.getPostScore() , disId);
+
         }else if (commentPO.getEntityType() == ENTITY_TYPE_COMMENT){
             // 评论
             val commentPO1 = commentService.selectCommentById(commentPO.getEntityId());
