@@ -59,6 +59,31 @@ spring:
       # 3s 自动提交
       auto-commit-interval: 3000
 
+  # QuartzProperties
+  quartz:
+    job-store-type: jdbc
+    scheduler-name: communityQM
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceId: AUTO
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            isClustered: true
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 5
+#    spring.quartz.job-store-type=jdbc
+#    spring.quartz.scheduler-name=communityScheduler
+#    spring.quartz.properties.org.quartz.scheduler.instanceId=AUTO
+#    spring.quartz.properties.org.quartz.jobStore.class=org.quartz.impl.jdbcjobstore.JobStoreTX
+#    spring.quartz.properties.org.quartz.jobStore.driverDelegateClass=org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+#    spring.quartz.properties.org.quartz.jobStore.isClustered=true
+#    spring.quartz.properties.org.quartz.threadPool.class=org.quartz.simpl.SimpleThreadPool
+#    spring.quartz.properties.org.quartz.threadPool.threadCount=5
+
 # mybatis config
 mybatis:
   mapper-locations: classpath:mapper/*.xml
