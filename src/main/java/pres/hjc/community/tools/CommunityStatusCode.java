@@ -7,7 +7,7 @@ package pres.hjc.community.tools;
  * @date 2020/8/2  17:11
  * @description : 注册状态
  */
-public interface CommunityRegisterStatus {
+public interface CommunityStatusCode {
 
     /**
      * success
@@ -49,5 +49,15 @@ public interface CommunityRegisterStatus {
      * 用户
      */
     int ENTITY_TYPE_USER = 3;
+
+    /**
+     * 普通用户
+     */
+    String AUTHORITY_USER = "egg";
+    String AUTHORITY_ADMIN = "admin";
+    String AUTHORITY_ROOT = "root";
+    String AUTHORITY_MODERATOR = "moderator";
+
+
 
 }

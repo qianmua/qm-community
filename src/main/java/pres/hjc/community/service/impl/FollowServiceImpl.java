@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Service;
 import pres.hjc.community.service.FollowService;
 import pres.hjc.community.service.UserService;
-import pres.hjc.community.tools.CommunityRegisterStatus;
+import pres.hjc.community.tools.CommunityStatusCode;
 import pres.hjc.community.tools.GenRedisKeyUtil;
 
 import java.util.*;
@@ -24,7 +24,7 @@ import java.util.*;
  */
 @Service
 @Primary
-public class FollowServiceImpl implements FollowService, CommunityRegisterStatus {
+public class FollowServiceImpl implements FollowService, CommunityStatusCode {
 
     @Autowired
     private RedisTemplate redisTemplate;

@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.UserService;
-import pres.hjc.community.tools.CommunityRegisterStatus;
+import pres.hjc.community.tools.CommunityStatusCode;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.CookieUtil;
 import pres.hjc.community.tools.GenRedisKeyUtil;
@@ -21,7 +21,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -36,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 @Controller
 @RequestMapping("/site")
 @Slf4j
-public class SiteController implements CommunityRegisterStatus {
+public class SiteController implements CommunityStatusCode {
 
     @Autowired
     private UserService userService;

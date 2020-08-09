@@ -5,16 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pres.hjc.community.annotation.AuthRequired;
 import pres.hjc.community.dto.PageDTO;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.event.EventProducer;
 import pres.hjc.community.service.FollowService;
 import pres.hjc.community.service.UserService;
-import pres.hjc.community.tools.CommunityRegisterStatus;
+import pres.hjc.community.tools.CommunityStatusCode;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
-import pres.hjc.community.tools.ObjectCommunityConstant;
+import pres.hjc.community.tools.KafkaCommunityConstant;
 import pres.hjc.community.vo.EventVO;
 
 import java.util.Map;
@@ -28,7 +27,7 @@ import java.util.Map;
  */
 //@RestController
 @Controller
-public class FollowController implements CommunityRegisterStatus, ObjectCommunityConstant {
+public class FollowController implements CommunityStatusCode, KafkaCommunityConstant {
 
     @Autowired
     private FollowService followService;

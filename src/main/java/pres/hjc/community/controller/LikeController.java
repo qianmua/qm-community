@@ -2,17 +2,13 @@ package pres.hjc.community.controller;
 
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pres.hjc.community.annotation.AuthRequired;
 import pres.hjc.community.event.EventProducer;
 import pres.hjc.community.service.LikeService;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
-import pres.hjc.community.tools.ObjectCommunityConstant;
+import pres.hjc.community.tools.KafkaCommunityConstant;
 import pres.hjc.community.vo.EventVO;
 
 import java.util.HashMap;
@@ -28,7 +24,7 @@ import java.util.HashMap;
 //@Controller
 //@RequestMapping("/like")
 
-public class LikeController implements ObjectCommunityConstant {
+public class LikeController implements KafkaCommunityConstant {
 
     @Autowired
     private LikeService likeService;

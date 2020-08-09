@@ -3,14 +3,13 @@ package pres.hjc.community.event;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import pres.hjc.community.entity.MessagePO;
 import pres.hjc.community.service.MessageService;
-import pres.hjc.community.tools.ObjectCommunityConstant;
+import pres.hjc.community.tools.KafkaCommunityConstant;
 import pres.hjc.community.vo.EventVO;
 
 import java.util.Date;
@@ -25,7 +24,7 @@ import java.util.HashMap;
  */
 @Component
 @Slf4j
-public class EventConsumer implements ObjectCommunityConstant {
+public class EventConsumer implements KafkaCommunityConstant {
 
     @Autowired
     private MessageService messageService;

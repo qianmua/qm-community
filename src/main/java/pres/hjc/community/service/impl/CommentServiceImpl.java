@@ -13,7 +13,7 @@ import pres.hjc.community.entity.CommentPO;
 import pres.hjc.community.filter.WorldsFilter;
 import pres.hjc.community.service.CommentService;
 import pres.hjc.community.service.DiscussPostService;
-import pres.hjc.community.tools.CommunityRegisterStatus;
+import pres.hjc.community.tools.CommunityStatusCode;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Service
 @Primary
-public class CommentServiceImpl implements CommentService , CommunityRegisterStatus {
+public class CommentServiceImpl implements CommentService , CommunityStatusCode {
 
     @Autowired
     private CommentMapper commentMapper;

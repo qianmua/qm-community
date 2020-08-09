@@ -18,7 +18,7 @@ import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.FollowService;
 import pres.hjc.community.service.LikeService;
 import pres.hjc.community.service.UserService;
-import pres.hjc.community.tools.CommunityRegisterStatus;
+import pres.hjc.community.tools.CommunityStatusCode;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
 
@@ -38,7 +38,7 @@ import java.io.OutputStream;
 @Controller
 @RequestMapping("/user")
 @Slf4j
-public class UserController implements CommunityRegisterStatus {
+public class UserController implements CommunityStatusCode {
 
     @Autowired
     UserService userService;

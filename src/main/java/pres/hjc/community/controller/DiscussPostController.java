@@ -13,7 +13,7 @@ import pres.hjc.community.service.CommentService;
 import pres.hjc.community.service.DiscussPostService;
 import pres.hjc.community.service.LikeService;
 import pres.hjc.community.service.UserService;
-import pres.hjc.community.tools.CommunityRegisterStatus;
+import pres.hjc.community.tools.CommunityStatusCode;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
 
@@ -28,7 +28,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/discuss")
-public class DiscussPostController implements CommunityRegisterStatus {
+public class DiscussPostController implements CommunityStatusCode {
 
     @Autowired
     DiscussPostService discussPostService;

@@ -11,7 +11,7 @@ import pres.hjc.community.service.DiscussPostService;
 import pres.hjc.community.service.LikeService;
 import pres.hjc.community.service.MessageService;
 import pres.hjc.community.service.UserService;
-import pres.hjc.community.tools.CommunityRegisterStatus;
+import pres.hjc.community.tools.CommunityStatusCode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ import java.util.Map;
  * @description :
  */
 @Controller
-public class HomeController implements CommunityRegisterStatus {
+public class HomeController implements CommunityStatusCode {
 
     @Autowired
     private DiscussPostService discussPostService;
@@ -89,6 +89,10 @@ public class HomeController implements CommunityRegisterStatus {
         return "error/500";
     }
 
+    /**
+     * 403
+     * @return view
+     */
     @GetMapping("/denied")
     public String err404() { return "error/404"; }
 

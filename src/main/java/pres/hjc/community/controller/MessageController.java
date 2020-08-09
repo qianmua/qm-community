@@ -15,7 +15,7 @@ import pres.hjc.community.service.MessageService;
 import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
-import pres.hjc.community.tools.ObjectCommunityConstant;
+import pres.hjc.community.tools.KafkaCommunityConstant;
 
 import java.util.*;
 
@@ -28,7 +28,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/message")
-public class MessageController implements ObjectCommunityConstant {
+public class MessageController implements KafkaCommunityConstant {
 
     @Autowired
     private MessageService messageService;

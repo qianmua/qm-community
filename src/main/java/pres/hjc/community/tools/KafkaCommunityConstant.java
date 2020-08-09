@@ -7,7 +7,7 @@ package pres.hjc.community.tools;
  * @date 2020/8/7  17:29
  * @description :
  */
-public interface ObjectCommunityConstant {
+public interface KafkaCommunityConstant {
 
 
 

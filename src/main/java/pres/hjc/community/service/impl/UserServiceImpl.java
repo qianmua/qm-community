@@ -17,7 +17,7 @@ import pres.hjc.community.dao.UserMapper;
 import pres.hjc.community.entity.LoginTicketPO;
 import pres.hjc.community.entity.UserPO;
 import pres.hjc.community.service.UserService;
-import pres.hjc.community.tools.CommunityRegisterStatus;
+import pres.hjc.community.tools.CommunityStatusCode;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.GenRedisKeyUtil;
 import pres.hjc.community.tools.MailClientUtil;
@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @Primary
-public class UserServiceImpl implements UserService, CommunityRegisterStatus, UserDetailsService {
+public class UserServiceImpl implements UserService, CommunityStatusCode, UserDetailsService {
 
     @Autowired
     UserMapper userMapper;
@@ -322,4 +322,5 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus, Us
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;
     }
+
 }
