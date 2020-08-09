@@ -19,5 +19,8 @@ public interface DiscussPostService {
     int addDiscussPost(DiscussPostPO discussPostPO);
     DiscussPostPO selectDiscussPostById(@Param("id") int id);
     int updateCommentCount(int commentCount , int id);
+    int updateType(int id, int type);
+    int updateStatus(int id, int status);
+    int updateScore(int id, double score);
 
 }

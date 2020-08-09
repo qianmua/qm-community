@@ -9,6 +9,7 @@ import pres.hjc.community.dto.PageDTO;
 import pres.hjc.community.entity.CommentPO;
 import pres.hjc.community.entity.DiscussPostPO;
 import pres.hjc.community.entity.UserPO;
+import pres.hjc.community.event.EventProducer;
 import pres.hjc.community.service.CommentService;
 import pres.hjc.community.service.DiscussPostService;
 import pres.hjc.community.service.LikeService;
@@ -16,6 +17,8 @@ import pres.hjc.community.service.UserService;
 import pres.hjc.community.tools.CommunityStatusCode;
 import pres.hjc.community.tools.CommunityUtil;
 import pres.hjc.community.tools.HostHolder;
+import pres.hjc.community.tools.KafkaCommunityConstant;
+import pres.hjc.community.vo.EventVO;
 
 import java.util.*;
 
@@ -28,7 +31,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/discuss")
-public class DiscussPostController implements CommunityStatusCode {
+public class DiscussPostController implements CommunityStatusCode, KafkaCommunityConstant {
 
     @Autowired
     DiscussPostService discussPostService;
@@ -44,6 +47,9 @@ public class DiscussPostController implements CommunityStatusCode {
 
     @Autowired
     private LikeService likeService;
+
+    @Autowired
+    private EventProducer eventProducer;
 
     /**
      * 发帖
@@ -64,8 +70,15 @@ public class DiscussPostController implements CommunityStatusCode {
         po1.setTitle(title);
         po1.setContent(content);
         po1.setCreateTime(new Date());
-
         discussPostService.addDiscussPost(po1);
+
+        // 触发 发帖 事件
+        // 同步到 es
+        /*eventProducer.fireEvent( new EventVO()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(po.getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(po1.getId()));*/
 
         return CommunityUtil.getJSONString(200 , "success");
     }
@@ -165,6 +178,67 @@ public class DiscussPostController implements CommunityStatusCode {
 
         return "site/discuss-detail";
 
+    }
+
+    /**
+     * 帖子置顶
+     * @param id id
+     * @return
+     */
+    @PostMapping("/top")
+    @ResponseBody
+    public String setTop(int id){
+        discussPostService.updateType(id , DISCUSS_TYPE_TOP);
+
+        // 触发 发帖 事件
+        eventProducer.fireEvent( new EventVO()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(hostHolder.getUsersPO().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id));
+
+        return CommunityUtil.getJSONString(200);
+    }
+
+    /**
+     * 帖子加精
+     * @param id id
+     * @return
+     */
+    @PostMapping("/wonderful")
+    @ResponseBody
+    public String setWonderful(int id){
+        discussPostService.updateStatus(id , DISCUSS_TYPE_TOP);
+
+        // 触发 发帖 事件
+        /*eventProducer.fireEvent( new EventVO()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(hostHolder.getUsersPO().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id));*/
+
+        return CommunityUtil.getJSONString(200);
+    }
+
+    /**
+     * 帖子删除
+     * @param id id
+     * @return
+     */
+    @PostMapping("/delete")
+    @ResponseBody
+    public String setDelete(int id){
+
+        discussPostService.updateStatus(id , DISCUSS_TYPE_UNTOP);
+
+        // 触发 发帖 事件
+        /*eventProducer.fireEvent( new EventVO()
+                .setTopic(TOPIC_DELETE)
+                .setUserId(hostHolder.getUsersPO().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id));*/
+
+        return CommunityUtil.getJSONString(200);
     }
 
 

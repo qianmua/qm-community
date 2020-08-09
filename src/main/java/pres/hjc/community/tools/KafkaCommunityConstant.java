@@ -20,6 +20,12 @@ public interface KafkaCommunityConstant {
     String TOPIC_LIKE = "like";
     /**关注*/
     String TOPIC_FOLLOW = "follow";
+    /**发帖*/
+    String TOPIC_PUBLISH = "publish";
+    /**删帖*/
+    String TOPIC_DELETE = "delete";
+    /**分享*/
+    String TOPIC_SHARE = "share";
 
     /**
      * 系统ID

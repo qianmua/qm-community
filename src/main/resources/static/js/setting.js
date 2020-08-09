@@ -13,7 +13,8 @@ function upload() {
             if(data && data.code == 0) {
                 // 更新头像访问路径
                 $.post(
-                    CONTEXT_PATH + "/user/header/url",
+                    /*CONTEXT_PATH +*/
+                     "/user/header/url",
                     {"fileName":$("input[name='key']").val()},
                     function(data) {
                         data = $.parseJSON(data);

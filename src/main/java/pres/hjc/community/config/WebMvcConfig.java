@@ -19,11 +19,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
     private BaseHandlerInterceptor baseHandlerInterceptor;
 
-//    @Autowired
-//    private LoginTicketHandlerInterceptor loginTicketHandlerInterceptor;
-
     @Autowired
-    private AuthRequiredHandlerInterceptor authRequiredHandlerInterceptor;
+    private LoginTicketHandlerInterceptor loginTicketHandlerInterceptor;
+
+//    @Autowired
+//    private AuthRequiredHandlerInterceptor authRequiredHandlerInterceptor;
+
     @Autowired
     private MessageInterceptor messageInterceptor;
     @Autowired
@@ -39,13 +40,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/**/*.css" , "/**/*.js" , "/img/**")
                 .addPathPatterns("register" , "/login");
 
-        //security
-        //registry.addInterceptor(loginTicketHandlerInterceptor)
-        //        .excludePathPatterns("/**/*.css" , "/**/*.js" , "/img/**");
-
-
-        registry.addInterceptor(authRequiredHandlerInterceptor)
+        registry.addInterceptor(loginTicketHandlerInterceptor)
                 .excludePathPatterns("/**/*.css" , "/**/*.js" , "/img/**");
+
+
+        //security
+//        registry.addInterceptor(authRequiredHandlerInterceptor)
+//                .excludePathPatterns("/**/*.css" , "/**/*.js" , "/img/**");
 
         registry.addInterceptor(messageInterceptor)
                 .excludePathPatterns("/**/*.css" , "/**/*.js" , "/img/**");

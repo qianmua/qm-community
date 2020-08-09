@@ -31,11 +31,14 @@ function like(btn, entityType, entityId, entityUserId, postId) {
 // 置顶
 function setTop() {
     $.post(
-        CONTEXT_PATH + "/discuss/top",
+        /*CONTEXT_PATH + */
+        "/discuss/top",
         {"id":$("#postId").val()},
         function(data) {
             data = $.parseJSON(data);
-            if(data.code == 0) {
+
+            /*状态码*/
+            if(data.code == 200) {
                 $("#topBtn").attr("disabled", "disabled");
             } else {
                 alert(data.msg);
@@ -52,7 +55,7 @@ function setWonderful() {
         {"id":$("#postId").val()},
         function(data) {
             data = $.parseJSON(data);
-            if(data.code == 0) {
+            if(data.code == 200) {
                 $("#wonderfulBtn").attr("disabled", "disabled");
             } else {
                 alert(data.msg);
@@ -64,12 +67,14 @@ function setWonderful() {
 // 删除
 function setDelete() {
     $.post(
-        CONTEXT_PATH + "/discuss/delete",
+        /* CONTEXT_PATH +*/
+        "/discuss/delete",
         {"id":$("#postId").val()},
         function(data) {
             data = $.parseJSON(data);
-            if(data.code == 0) {
-                location.href = CONTEXT_PATH + "/index";
+            if(data.code == 200) {
+                /* CONTEXT_PATH + */
+                location.href ="/index";
             } else {
                 alert(data.msg);
             }

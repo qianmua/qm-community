@@ -39,6 +39,8 @@ public interface CommunityStatusCode {
      * 帖子
      */
     int ENTITY_TYPE_POST = 1;
+    int DISCUSS_TYPE_TOP = 1;
+    int DISCUSS_TYPE_UNTOP = 2;
 
     /**
      * 评论
