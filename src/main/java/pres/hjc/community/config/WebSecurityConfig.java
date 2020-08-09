@@ -55,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements C
      * @param auth 认证接口，用与构建Manage工具
      * @throws Exception err
      */
-    @Override
+    /*@Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // 内置
         auth.userDetailsService(userService).passwordEncoder(new Pbkdf2PasswordEncoder("123456"));
@@ -66,13 +66,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements C
         // 每个AuthenticationProvider 负责 一种认证
 
         auth.authenticationProvider(new AuthenticationProvider() {
-            /**
+            *//**
              * 账号密码认证
              * 认证逻辑
              * @param authentication 认证信息 接口
              * @return info
              * @throws AuthenticationException e
-             */
+             *//*
             @Override
             public Authentication authenticate(Authentication authentication) throws AuthenticationException {
                 // 认证逻辑
@@ -101,12 +101,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements C
                         userDetails.getAuthorities());
             }
 
-            /**
+            *//**
              * 支持 的认证结果类型
              *
              * @param authentication authentication
              * @return  1 0
-             */
+             *//*
             @Override
             public boolean supports(Class<?> authentication) {
                 // UsernamePasswordAuthenticationToken
@@ -114,14 +114,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements C
                 return UsernamePasswordAuthenticationToken.class.equals(authentication);
             }
         });
-    }
+    }*/
 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // 授权逻辑
 
-        http.formLogin()
+        /*http.formLogin()
                 // get
                 .loginPage("/site/login")
                 // post
@@ -130,14 +130,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements C
                 .successHandler(null)
                 // authenticationSuccessHandler
                 .failureHandler(null)
-                ;
+                ;*/
 
 
         // 默认 拦截 logout url
         // 覆盖默认逻辑
         // 定制
         http.logout()
-                .logoutUrl("/site/logout")
+                .logoutUrl("/test/site/logout")
                 // logoutSuccessHandler
 //                .logoutSuccessHandler(null)
                 ;
@@ -205,7 +205,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements C
         }, UsernamePasswordAuthenticationFilter.class);
 
 
-        http.rememberMe()
+        /*http.rememberMe()
                 // token 存到内存中
                 // 自定义实现 TokenRepository
                 .tokenRepository(new InMemoryTokenRepositoryImpl())
@@ -214,7 +214,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements C
                 // 自动认证
                 .userDetailsService(userService)
                 // 安全 cookie // https
-                .useSecureCookie(false);
+                .useSecureCookie(false);*/
 
 
     }
