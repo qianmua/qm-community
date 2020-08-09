@@ -23,6 +23,8 @@ public class TestSql {
         .INTO_VALUES("a2" ,"a2")
         .INTO_VALUES("a3" ,"a3")
         .INTO_VALUES("a4" ,"a4");
+
+
         System.out.println(sql.toString());
     }
 }

@@ -12,7 +12,7 @@ import java.util.Map;
  * @date 2020/8/2  13:07
  * @description :
  */
-public interface UserService {
+public interface UserService{
 
     default UserPO selectById(int id){
         return null;

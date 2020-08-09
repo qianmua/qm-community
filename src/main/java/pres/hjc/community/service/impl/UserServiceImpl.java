@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -34,7 +37,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @Primary
-public class UserServiceImpl implements UserService, CommunityRegisterStatus {
+public class UserServiceImpl implements UserService, CommunityRegisterStatus, UserDetailsService {
 
     @Autowired
     UserMapper userMapper;
@@ -313,5 +316,10 @@ public class UserServiceImpl implements UserService, CommunityRegisterStatus {
     private void clearCache(int userId){
         String  key = GenRedisKeyUtil.getUserKey(userId);
         redisTemplate.delete(key);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
     }
 }

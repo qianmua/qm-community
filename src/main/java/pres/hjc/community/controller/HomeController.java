@@ -93,4 +93,22 @@ public class HomeController implements CommunityRegisterStatus {
     public String err404() { return "error/404"; }
 
 
+    /*@GetMapping("/discuss")
+    public String getDiscussView(){
+        return "site/discuss";
+    }
+    @GetMapping("/letter")
+    public String getLetterView(){
+        return "site/letter";
+    }
+    @GetMapping("/admin")
+    public String getAdminView(){
+        return "site/admin";
+    }
+    @GetMapping("/loginPage")
+    public String getLoginView(){
+        return "site/login";
+    }*/
+
+
 }
