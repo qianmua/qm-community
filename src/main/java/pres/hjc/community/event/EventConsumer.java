@@ -33,7 +33,7 @@ public class EventConsumer implements KafkaCommunityConstant {
      * 消费
      * 订阅 消费 主题
      */
-    @KafkaListener( topics = {TOPIC_COMMENT , TOPIC_FOLLOW , TOPIC_LIKE})
+//    @KafkaListener( topics = {TOPIC_COMMENT , TOPIC_FOLLOW , TOPIC_LIKE})
     public void handleCommentMessage(ConsumerRecord consumerRecord){
         if (consumerRecord == null || consumerRecord.value() == null){
             log.error("消息为空 ： null");
@@ -48,24 +48,24 @@ public class EventConsumer implements KafkaCommunityConstant {
         }
 
         // 发送通知
-        val messagePO = new MessagePO();
-        messagePO.setFromId(SYSTEM_USER_ID);
-        messagePO.setToId(eventVO.getEntityUserId());
-        messagePO.setConversationId(eventVO.getTopic());
-        messagePO.setStatus(0);
-        messagePO.setCreateTime(new Date());
+//        val messagePO = new MessagePO();
+//        messagePO.setFromId(SYSTEM_USER_ID);
+//        messagePO.setToId(eventVO.getEntityUserId());
+//        messagePO.setConversationId(eventVO.getTopic());
+//        messagePO.setStatus(0);
+//        messagePO.setCreateTime(new Date());
 
         // VO
-        val content = new HashMap<String, Object>();
-        content.put("userId", eventVO.getUserId());
-        content.put("entityType", eventVO.getEntityType());
-        content.put("entityId", eventVO.getEntityId());
-
-        if (!eventVO.getData().isEmpty()){
-            eventVO.getData().forEach(content::put);
-        }
-        // 推送消息
-        messagePO.setContent(JSONObject.toJSONString(content));
+//        val content = new HashMap<String, Object>();
+//        content.put("userId", eventVO.getUserId());
+//        content.put("entityType", eventVO.getEntityType());
+//        content.put("entityId", eventVO.getEntityId());
+//
+//        if (!eventVO.getData().isEmpty()){
+//            eventVO.getData().forEach(content::put);
+//        }
+//        // 推送消息
+//        messagePO.setContent(JSONObject.toJSONString(content));
 
 //        messageService.insertMessage( messagePO);
     }

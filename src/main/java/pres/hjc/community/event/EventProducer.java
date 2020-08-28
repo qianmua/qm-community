@@ -26,7 +26,7 @@ public class EventProducer {
      */
     public void fireEvent(EventVO eventVO){
         // 发布到主题
-        kafkaTemplate.send(eventVO.getTopic() , JSONObject.toJSONString(eventVO));
+//        kafkaTemplate.send(eventVO.getTopic() , JSONObject.toJSONString(eventVO));
     }
 
 
